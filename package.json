@@ -1,0 +1,12 @@
+{
+  "name": "web-crawler",
+  "version": "1.0.0",
+  "description": "simple web navigation and resource downloading",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "typescript": "4.3.5"
+  }
+}
