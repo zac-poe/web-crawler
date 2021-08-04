@@ -4,7 +4,7 @@
   "description": "simple web navigation and resource downloading",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc -b"
   },
   "dependencies": {
     "typescript": "4.3.5"
