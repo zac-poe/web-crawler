@@ -4,9 +4,14 @@
   "description": "simple web navigation and resource downloading",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc -b"
+    "clean": "rm -rf dist/",
+    "build": "npm run clean && npm run build:compile",
+    "build:compile": "tsc -b"
   },
   "dependencies": {
-    "typescript": "4.3.5"
+    "@types/node": "^16.4.10",
+    "typescript": "^4.3.5",
+    "command-line-args": "^5.2.0",
+    "command-line-usage": "^6.1.0"
   }
 }
