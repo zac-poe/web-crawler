@@ -16,10 +16,12 @@
   },
   "dependencies": {
     "@types/node": "^15.12.2",
+    "@types/command-line-args": "^5.0.1",
     "command-line-args": "^5.2.0",
+    "@types/command-line-usage": "^5.0.2",
     "command-line-usage": "^6.1.0",
     "yaml": "^1.10.2",
-    "import-local": "^3.0.2"
+    "fs": "^0.0.1-security"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",

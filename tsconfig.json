@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
-        "outDir": "dist"
+        "strict": true,
+        "target": "ESNEXT",
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "declaration": true
     },
     "include": [
         "src/**/*"
