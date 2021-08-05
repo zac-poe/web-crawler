@@ -2,6 +2,7 @@
     "compilerOptions": {
         "strict": true,
         "target": "ESNEXT",
+        "module": "CommonJS",
         "moduleResolution": "node",
         "outDir": "dist",
         "declaration": true
