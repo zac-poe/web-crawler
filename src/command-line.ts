@@ -17,7 +17,6 @@ export class CommandLine {
         const usageMessage = cli_usage(this.usage);
 
         this.arguments = cli(this.options);
-        console.log(`parsed: ${JSON.stringify(this.arguments)}`)
 
         this.isValid = !!(!this.arguments.help && this.arguments.file);
 

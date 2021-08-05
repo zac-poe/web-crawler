@@ -2,7 +2,10 @@
   "name": "web-crawler",
   "version": "1.0.0",
   "description": "simple web navigation and resource downloading",
-  "main": "index.ts",
+  "main": "dist/index.js",
+  "bin": {
+    "web-crawler": "./cli.js"
+  },
   "scripts": {
     "postinstall": "npm run build:rebuild",
     "clean": "rm -rf dist/",
@@ -14,7 +17,9 @@
   "dependencies": {
     "@types/node": "^15.12.2",
     "command-line-args": "^5.2.0",
-    "command-line-usage": "^6.1.0"
+    "command-line-usage": "^6.1.0",
+    "yaml": "^1.10.2",
+    "import-local": "^3.0.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",
