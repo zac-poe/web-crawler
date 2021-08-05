@@ -4,14 +4,23 @@
   "description": "simple web navigation and resource downloading",
   "main": "index.ts",
   "scripts": {
+    "postinstall": "npm run build:rebuild",
     "clean": "rm -rf dist/",
-    "build": "npm run clean && npm run build:compile",
-    "build:compile": "tsc -b"
+    "build": "npm test && npm run build:rebuild",
+    "build:rebuild": "npm run clean && npm run build:compile",
+    "build:compile": "tsc -b",
+    "test": "jest --silent"
   },
   "dependencies": {
-    "@types/node": "^16.4.10",
-    "typescript": "^4.3.5",
+    "@types/node": "^15.12.2",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "typescript": "^4.3.5",
+    "ts-node": "^10.1.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.4"
   }
 }
