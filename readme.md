@@ -13,9 +13,11 @@ Define your sequential crawl path steps in yaml
 
 ### Fields
 - `Get`: http get request
+- `Download`: saves target resource
 - `Evaluate`: define name/values where name is a variable you create and the value is an xpath expression to evaluate against a previous result
 - `Then`: group a subsequent set of actions
 - `Repeat`: number of times to repeat current level of actions
+- `Print`: write value to standard out
 
 ### Variables
 Interpolate variables with curly braces, ex: `{myVariable}`

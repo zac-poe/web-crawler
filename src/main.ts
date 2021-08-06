@@ -5,5 +5,7 @@ import { Crawler } from './crawler';
 const cli = new CommandLine();
 
 if(cli.isValid) {
-    new Crawler(new FileReader(cli.arguments.file).content).walk();
+    new Crawler(new FileReader(cli.arguments.file).content,
+            cli.arguments.verbose
+        ).walk();
 }
