@@ -4,7 +4,8 @@ import * as cli_usage from 'command-line-usage';
 export class CommandLine {
     private readonly options = [
         {name: 'help', alias: 'h', type: Boolean, description: 'display usage'},
-        {name: 'file', alias: 'f', typeLabel: 'file', description: 'name of file containing crawler path'},
+        {name: 'file', alias: 'f', typeLabel: 'file', description: 'name of yaml file containing crawler path'},
+        {name: 'verbose', alias: 'v', type: Boolean, description: 'write all results to standard out during execution'},
     ];
     private readonly usage = [
         {header: "Web Crawler", content: "Accepts a path and walks it sequentially"},

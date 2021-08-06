@@ -18,10 +18,13 @@ describe('command line support', () => {
     });
 
     it('is invalid when missing file', () => {
+        mockCli.mockReturnValue({
+            verbose: true
+        });
         expect(new CommandLine().isValid).toEqual(false);
     });
 
-    it('is invalid when providing required args', () => {
+    it('is valid when providing file', () => {
         mockCli.mockReturnValue({
             file: 'some file'
         });

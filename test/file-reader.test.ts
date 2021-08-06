@@ -1,4 +1,4 @@
-import { StepReader } from "../src/step-reader";
+import { FileReader } from "../src/file-reader";
 import * as fs from 'fs';
 
 jest.mock('fs');
@@ -11,16 +11,16 @@ describe('step reader', () => {
     })
 
     it('reads yaml file', () => {
-        const expectedName = 'some name value';
+        const expectedName = 'some name';
         const expectedSteps = [ 'a', 'b', 'c' ];
         mockReadFile.mockReturnValue(`Name: ${expectedName}\nSteps:\n  - ${expectedSteps[0]}\n  - ${expectedSteps[1]}\n  - ${expectedSteps[2]}`);
 
-        const reader = new StepReader('some file');
+        const reader = new FileReader('some file');
 
-        expect(reader.steps.Name).toEqual(expectedName);
-        expect(reader.steps.Steps.length).toEqual(expectedSteps.length);
+        expect(reader.content.Name).toEqual(expectedName);
+        expect(reader.content.Steps.length).toEqual(expectedSteps.length);
         expectedSteps.forEach((s, i) => {
-            expect(reader.steps.Steps[i]).toEqual(s);
+            expect(reader.content.Steps[i]).toEqual(s);
         });
     });
 });
