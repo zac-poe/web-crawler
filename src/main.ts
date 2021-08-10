@@ -1,11 +1,13 @@
 import { CommandLine } from './command-line';
 import { FileReader } from './file-reader';
-import { Crawler } from './crawler';
+import { ActionFactory } from './actions/action-factory';
+import { Sequencer } from './sequencer';
 
 const cli = new CommandLine();
 
 if(cli.isValid) {
-    new Crawler(new FileReader(cli.arguments.file).content,
-            cli.arguments.verbose
-        ).walk();
+    const isVerbose = cli.arguments.verbose;
+    
+    new Sequencer(new ActionFactory(isVerbose).run, isVerbose)
+        .run(new FileReader(cli.arguments.file).content);
 }
