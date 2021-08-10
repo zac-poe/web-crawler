@@ -1,5 +1,4 @@
 import { Action } from "../../src/actions/action";
-import { Command } from "../../src/actions/command";
 
 describe('action', () => {
     it('has no command', () => {
@@ -17,10 +16,10 @@ describe('action', () => {
             expectedValue = "some state value";
 
         class TestAction extends Action {
-            getCommand(): Command {
+            getCommand(): string {
                 return (expectedKey as any);
             }
-            test(state, value) {
+            test(state: any, value: any) {
                 return this.append(state, value);
             }
         }
@@ -55,7 +54,7 @@ describe('action', () => {
 });
 
 class TestInterpolation extends Action {
-    test(str, state) {
+    test(str: string, state: any) {
         return this.interpolate(str, state);
     }
 }

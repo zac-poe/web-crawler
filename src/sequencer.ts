@@ -12,7 +12,7 @@ export class Sequencer {
             if(this.verbose) {
                 console.log('Beginning Sequence');
             }
-            resolve(this.chain(Promise.resolve({...state}),
+            resolve(this.chain(Promise.resolve(state),
                 this.parse(commands)));
         }).then(sequenceState => {
             if(this.verbose) {

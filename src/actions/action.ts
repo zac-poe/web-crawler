@@ -1,24 +1,20 @@
-import { Command } from "./command";
-
 export class Action {
     protected interpolate(value: string, state: any) {
         return Object.keys(state).reduce((result, variable) => {
-            return result.replace(`{${variable}}`, state[variable]);
+            return result.replaceAll(`{${variable}}`, state[variable]);
         }, value);
     }
 
     protected append(state: any, value: any) {
-        return {
-            ...state,
-            [this.getCommand()]: value
-        };
+        state[this.getCommand()] = value;
+        return state;
     }
 
     run(value: any, state: any, verbose: boolean): Promise<any> {
         return Promise.resolve(state);
     }
 
-    getCommand(): Command {
-        throw new Error('Action has no command')
+    getCommand(): string {
+        return undefined as any;
     }
 }

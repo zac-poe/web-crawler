@@ -3,14 +3,14 @@ import { Action } from "./action";
 import axios from 'axios';
 
 export class GetAction extends Action {
-    getCommand(): Command {
-        return Command.Get;
+    getCommand(): string {
+        return Command[Command.Get];
     }
 
     run(value: any, state: any, verbose: boolean): Promise<any> {
         value = this.interpolate(value, state);
         if(!value) {
-            throw new Error(`${this.getCommand()} command requires url`);
+            return Promise.reject(`${this.getCommand()} command requires url`);
         }
         return axios.get(value).then(result => {
             if(verbose) {
