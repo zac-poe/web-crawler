@@ -1,13 +1,12 @@
 import { CommandLine } from './command-line';
 import { FileReader } from './file-reader';
-import { ActionFactory } from './actions/action-factory';
-import { Sequencer } from './sequencer';
+import { Block } from './block';
+import { logger } from './logger';
 
 const cli = new CommandLine();
 
 if(cli.isValid) {
-    const isVerbose = cli.arguments.verbose;
+    logger.silent = !cli.arguments.verbose;
     
-    new Sequencer(new ActionFactory(isVerbose).run, isVerbose)
-        .run(new FileReader(cli.arguments.file).content);
+    new Block(new FileReader(cli.arguments.file).content).resolve();
 }

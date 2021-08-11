@@ -9,7 +9,7 @@ Use with file: `web-crawler -f yourFile.yaml`
 Alternatively, `npm install` and then `./web-crawler.js -f yourFile.yaml`
 
 ## Yaml File
-Define your sequential crawl commands in yaml
+Define your sequential crawler commands in yaml
 
 ### Commands
 - `Sequence`: list of commands - provides ability to sequentially issue multiple comands of the same type

@@ -1,3 +1,5 @@
+import { Block } from "../block";
+
 export class Action {
     protected interpolate(value: string, state: any) {
         return Object.keys(state).reduce((result, variable) => {
@@ -10,11 +12,17 @@ export class Action {
         return state;
     }
 
-    run(value: any, state: any, verbose: boolean): Promise<any> {
-        return Promise.resolve(state);
+    run(context: ActionContext): Promise<any> {
+        return Promise.resolve(context.state);
     }
 
     getCommand(): string {
         return undefined as any;
     }
+}
+
+export interface ActionContext {
+    value: any;
+    state: any;
+    block: Block;
 }

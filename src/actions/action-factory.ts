@@ -1,24 +1,22 @@
+import { logger } from '../logger';
 import { Action } from "./action";
 import { GetAction } from "./get";
 import { DownloadAction } from './download';
 import { PrintAction } from './print';
 import { EvaluateAction } from './evaluate';
-import { RepeatAction } from './repeat';
+import { SequenceAction } from "./sequence";
 
-export class ActionFactory {
+class ActionFactory {
     private readonly actions: any = {};
-    private readonly isVerbose: boolean;
 
-    constructor(verbose: boolean) {
-        this.isVerbose = verbose;
-
+    constructor() {
         //all defined actions
         this.add(new Action());
         this.add(new GetAction());
         this.add(new DownloadAction());
         this.add(new PrintAction());
         this.add(new EvaluateAction());
-        this.add(new RepeatAction());
+        this.add(new SequenceAction());
     }
 
     private add(action: Action) {
@@ -28,13 +26,11 @@ export class ActionFactory {
     get(command: string): Action {
         const action = this.actions[command];
         if(!action) {
-            console.warn(`Unknown command: ${command}`);
+            logger.warn(`Unknown command: ${command}`);
             return this.actions[undefined as any];
         }
         return action;
     }
-
-    run(action: string, value: any, state: any): Promise<any> {
-        return this.get(action).run(value, state, this.isVerbose);
-    }
 }
+
+export const actionFactory: ActionFactory = new ActionFactory();
