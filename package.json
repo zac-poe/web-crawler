@@ -8,10 +8,10 @@
     "web-crawler": "./web-crawler.js"
   },
   "scripts": {
-    "postinstall": "npm run build:rebuild",
+    "postinstall": "npm run build",
     "clean": "rm -rf dist/",
-    "build": "npm test && npm run build:rebuild",
-    "build:rebuild": "npm run clean && npm run build:compile",
+    "build:full": "npm test && npm run build",
+    "build": "npm run clean && npm run build:compile",
     "build:compile": "tsc -b",
     "test": "npm run test:local -- --silent",
     "test:local": "jest"
