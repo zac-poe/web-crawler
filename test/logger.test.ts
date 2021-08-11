@@ -1,7 +1,7 @@
 import { logger } from "../src/logger";
 
 describe('logger', () => {
-    const mockConsole = console.log = jest.fn();
+    const mockConsole = console.info = jest.fn();
 
     beforeEach(() => {
         mockConsole.mockClear();

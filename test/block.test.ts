@@ -1,6 +1,5 @@
 import { Block } from "../src/block";
 import { actionFactory } from "../src/actions/action-factory";
-import { Command } from "../src/actions/command";
 
 describe('block', () => {
     const mockExecutor = jest.fn();
