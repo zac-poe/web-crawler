@@ -1,6 +1,6 @@
-import { Sequencer } from "../src/crawler";
+import { Block } from "../src/block";
 
-describe('sequencer', () => {
+describe('block', () => {
     const executor = jest.fn();
 
     beforeEach(() => {
@@ -10,33 +10,33 @@ describe('sequencer', () => {
     it('executes command', async () => {
         const expectedCommand = 'some command';
 
-        const subject = new Sequencer(executor, false);
-        
-        await subject.run({
+        const subject = new Block({
             [expectedCommand]: 'value'
         });
+        
+        await subject.resolve();
 
         expect(executor.mock.calls[0][0]).toEqual(expectedCommand);
     });
 
     it('executes with default state', async () => {
-        const subject = new Sequencer(executor, false);
-        
-        await subject.run({
+        const subject = new Block({
             Command: 'value'
         });
+        
+        await subject.resolve();
 
         expect(executor.mock.calls[0][2]).toEqual({});
     });
 
     it('executes commands sequentially', async () => {
-        const subject = new Sequencer(executor, true);
-        
-        await subject.run({
+        const subject = new Block({
             A: 'first',
             B: 'second',
             C: 'third'
         });
+        
+        await subject.resolve();
 
         expect(executor.mock.calls.length).toEqual(3);
         expect(executor.mock.calls[0][1]).toEqual('first');
@@ -47,37 +47,16 @@ describe('sequencer', () => {
     it('chains state', async () => {
         const firstStateResult = { a: '123', b: '456' };
 
-        const subject = new Sequencer(executor, false);
-
-        executor.mockReturnValueOnce(Promise.resolve(firstStateResult));
-        
-        await subject.run({
+        const subject = new Block({
             A: 'first',
             B: 'second'
         });
 
+        executor.mockReturnValueOnce(Promise.resolve(firstStateResult));
+        
+        await subject.resolve();
+
         expect(executor.mock.calls[1][2]).toStrictEqual(firstStateResult);
-    });
-
-    it('executes sequences', async () => {
-        const subject = new Sequencer(executor, true);
-        
-        await subject.run({
-        });
-    });
-
-    it('executes sub sequences', async () => {
-        const subject = new Sequencer(executor, true);
-        
-        await subject.run({
-        });
-    });
-
-    it('isolates sequences state', async () => {
-        const subject = new Sequencer(executor, false);
-        
-        await subject.run({
-        });
     });
 
     it('delegates to action for run', async () => {

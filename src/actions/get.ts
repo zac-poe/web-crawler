@@ -13,10 +13,13 @@ export class GetAction extends Action {
         if(!value) {
             return Promise.reject(`${this.getCommand()} command requires url`);
         }
-        return axios.get(value).then(result => {
+        return new Promise<void>(resolve => {
             logger.info(`Get: ${value}`);
+            resolve();
+        }).then(() => axios.get(value)).then(result => {
+            result = result?.data;
             logger.info(result);
-            return this.append(context.state, result.data);
+            return this.append(context.state, result);
         });
     }
 }

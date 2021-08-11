@@ -6,6 +6,11 @@ jest.mock('axios');
 
 describe('get action', () => {
     const mockRequest:jest.Mock<any,any> = (axios.get as any);
+    const context = (url: string, state: any={}) => ({
+        value: url,
+        state: state,
+        block: (undefined as any)
+    });
 
     beforeEach(() => {
         mockRequest.mockClear();
@@ -20,7 +25,7 @@ describe('get action', () => {
 
         mockRequest.mockReturnValue(Promise.resolve());
 
-        await new GetAction().run(expectedUrl, {}, false);
+        await new GetAction().run(context(expectedUrl));
 
         expect(mockRequest.mock.calls.length).toEqual(1);
         expect(mockRequest.mock.calls[0][0]).toEqual(expectedUrl);
@@ -29,9 +34,9 @@ describe('get action', () => {
     it('appends result to state', async () => {
         const expectedResult = "some content";
 
-        mockRequest.mockReturnValue(Promise.resolve(expectedResult));
+        mockRequest.mockReturnValue(Promise.resolve({data: expectedResult}));
 
-        const result = await new GetAction().run('url', {}, false);
+        const result = await new GetAction().run(context('url'));
 
         expect(result[Command[Command.Get]]).toEqual(expectedResult);
     });
@@ -39,7 +44,7 @@ describe('get action', () => {
     it('get fails without url', async () => {
         const subject = new GetAction();
 
-        await expect(subject.run(undefined, {}, false)).rejects.not.toBeUndefined();
+        await expect(subject.run(context(''))).rejects.not.toBeUndefined();
     });
 
     it('get failures fail crawler', async () => {
@@ -49,7 +54,7 @@ describe('get action', () => {
 
         const subject = new GetAction();
 
-        await expect(subject.run('url', {}, false)).rejects.toEqual(failure);
+        await expect(subject.run(context('url'))).rejects.toEqual(failure);
     });
 
     it('request interpolated url', async () => {
@@ -59,7 +64,7 @@ describe('get action', () => {
 
         mockRequest.mockReturnValue(Promise.resolve());
 
-        await new GetAction().run('http://{variable}/path', state, false);
+        await new GetAction().run(context('http://<variable>/path', state));
 
         expect(mockRequest.mock.calls[0][0]).toEqual('http://some value/path');
     });
