@@ -1,5 +1,5 @@
 # About
-Simple web crawler to walk provided path, run xpath evaluations, and access target resources
+Simple web crawler to walk a provided path, running xpath evaluations and accessing target resources
 
 ## Usage
 Install: `npm install -g`
@@ -7,6 +7,9 @@ Install: `npm install -g`
 Use with file: `web-crawler -f yourFile.yaml`
 
 Alternatively, `npm install` and then `./web-crawler.js -f yourFile.yaml`
+
+## Options
+`web-crawler --help` to get a comprehensive list of command line options
 
 ## Yaml File
 Define your sequential crawler commands in yaml
@@ -29,30 +32,6 @@ The following variables are systematically provided:
 The Sequence blocks define a new nested variable scope, inheriting any existing variables.
 
 ### Samples
-Output some lorem ipsum
-```
-Get: https://baconipsum.com/api/?type=meat-and-filler&format=text
-Print: <Get>
-```
-
-Output a html body from a news site
-```
-Sequence:
-  - Get: https://www.cnn.com/
-    Evaluate:
-      Top_Article: 
-  - Get: <Article>
-    Evaluate:
-      Body:
-    Print: <Body>
-```
-
-Download several NASA images of the day
-```
-Get: https://www.nasa.gov/multimedia/imagegallery/iotd.html
-Sequence:
-  - Evaluate:
-      Image: 
-    Download: <Image>
-    Repeat: 5
-```
+- Output some lorem ipsum: [lorem-ipsum.yaml](samples/lorem-ipsum.yaml)
+- Output a html body from a news site: [news.yaml](samples/news.yaml)
+- Download several NASA images of the day [nasa-iotd.yaml](samples/nasa-iotd.yaml)
