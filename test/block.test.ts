@@ -1,13 +1,22 @@
 import { Block } from "../src/block";
+import { actionFactory } from "../src/actions/action-factory";
+import { Command } from "../src/actions/command";
 
 describe('block', () => {
-    const executor = jest.fn();
+    const mockExecutor = jest.fn();
 
-    beforeEach(() => {
-        executor.mockClear();
+    beforeAll(() => {
+        actionFactory.get = jest.fn().mockImplementation((action) => ({
+            run: mockExecutor
+        }));
     });
 
-    it('executes command', async () => {
+    beforeEach(() => {
+        (actionFactory.get as any).mockClear();
+        mockExecutor.mockClear();
+    });
+
+    it('retrieves action for command', async () => {
         const expectedCommand = 'some command';
 
         const subject = new Block({
@@ -16,7 +25,20 @@ describe('block', () => {
         
         await subject.resolve();
 
-        expect(executor.mock.calls[0][0]).toEqual(expectedCommand);
+        expect((actionFactory.get as any).mock.calls.length).toEqual(1);
+        expect((actionFactory.get as any).mock.calls[0][0]).toEqual(expectedCommand);
+    });
+
+    it('executes command with value', async () => {
+        const expectedValue = 'some value';
+
+        const subject = new Block({
+            command: expectedValue
+        });
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].value).toEqual(expectedValue);
     });
 
     it('executes with default state', async () => {
@@ -26,7 +48,45 @@ describe('block', () => {
         
         await subject.resolve();
 
-        expect(executor.mock.calls[0][2]).toEqual({});
+        expect(mockExecutor.mock.calls[0][0].state).toEqual({Repeat: 0});
+    });
+
+    it('executes with provided state', async () => {
+        const expectedState = { a: 123 };
+        const subject = new Block({Command: 'value'},
+            expectedState);
+        
+        await subject.resolve();
+
+        const { Repeat, ...stateRemainder } = mockExecutor.mock.calls[0][0].state;
+        expect(stateRemainder).toEqual(expectedState);
+    });
+
+    it('executes with updated state', async () => {
+        const subject = new Block({Command: 'value'},
+            {a: 123});
+        
+        subject.updateState('a', 456);
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].state.a).toEqual(456);
+    });
+
+    it('executes with reset value for repeat', async () => {
+        const subject = new Block({Command: 'value'},
+            {Repeat: 37});
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].state).toEqual({Repeat: 0});
+    });
+
+    it('executes with block', async () => {
+        const subject = new Block({Command: 'value'});
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].block).toEqual(subject);
     });
 
     it('executes commands sequentially', async () => {
@@ -38,10 +98,10 @@ describe('block', () => {
         
         await subject.resolve();
 
-        expect(executor.mock.calls.length).toEqual(3);
-        expect(executor.mock.calls[0][1]).toEqual('first');
-        expect(executor.mock.calls[1][1]).toEqual('second');
-        expect(executor.mock.calls[2][1]).toEqual('third');
+        expect(mockExecutor.mock.calls.length).toEqual(3);
+        expect(mockExecutor.mock.calls[0][0].value).toEqual('first');
+        expect(mockExecutor.mock.calls[1][0].value).toEqual('second');
+        expect(mockExecutor.mock.calls[2][0].value).toEqual('third');
     });
 
     it('chains state', async () => {
@@ -52,23 +112,10 @@ describe('block', () => {
             B: 'second'
         });
 
-        executor.mockReturnValueOnce(Promise.resolve(firstStateResult));
+        mockExecutor.mockReturnValueOnce(Promise.resolve(firstStateResult));
         
         await subject.resolve();
 
-        expect(executor.mock.calls[1][2]).toStrictEqual(firstStateResult);
-    });
-
-    it('delegates to action for run', async () => {
-        const expectedValue = 'some value',
-            expectedState = { someState: 'other value' };
-
-        const mockAction = actionFactory.get(undefined as any) as any;
-
-        await actionFactory.run(undefined as any, expectedValue, expectedState);
-
-        expect(mockAction.run.mock.calls.length).toEqual(1);
-        expect(mockAction.run.mock.calls[0][0]).toEqual(expectedValue);
-        expect(mockAction.run.mock.calls[0][1]).toStrictEqual(expectedState);
+        expect(mockExecutor.mock.calls[1][0].state).toStrictEqual(firstStateResult);
     });
 });
