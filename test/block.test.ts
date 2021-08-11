@@ -79,4 +79,17 @@ describe('sequencer', () => {
         await subject.run({
         });
     });
+
+    it('delegates to action for run', async () => {
+        const expectedValue = 'some value',
+            expectedState = { someState: 'other value' };
+
+        const mockAction = actionFactory.get(undefined as any) as any;
+
+        await actionFactory.run(undefined as any, expectedValue, expectedState);
+
+        expect(mockAction.run.mock.calls.length).toEqual(1);
+        expect(mockAction.run.mock.calls[0][0]).toEqual(expectedValue);
+        expect(mockAction.run.mock.calls[0][1]).toStrictEqual(expectedState);
+    });
 });

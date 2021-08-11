@@ -5,6 +5,7 @@ import { DownloadAction } from './download';
 import { PrintAction } from './print';
 import { EvaluateAction } from './evaluate';
 import { SequenceAction } from "./sequence";
+import { RepeatAction } from "./repeat";
 
 class ActionFactory {
     private readonly actions: any = {};
@@ -17,6 +18,7 @@ class ActionFactory {
         this.add(new PrintAction());
         this.add(new EvaluateAction());
         this.add(new SequenceAction());
+        this.add(new RepeatAction());
     }
 
     private add(action: Action) {
