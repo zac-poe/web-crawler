@@ -16,7 +16,7 @@ export class Block {
 
     async resolve(): Promise<any> {
         return new Promise(resolve => {
-            logger.info(`Beginning commands: ${JSON.stringify(this.commandSequence)}`);
+            logger.info(`Beginning commands: ${JSON.stringify(this.commandSequence, null, '  ')}`);
             resolve(this.chain(Promise.resolve(this.state), this.commandSequence));
         });
     }

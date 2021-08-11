@@ -20,11 +20,11 @@ Define your sequential crawler commands in yaml
 - `Repeat`: number of times to repeat current level of actions
 
 ### Variables
-Interpolate variables with curly braces, ex: `{myVariable}`
+Interpolate variables with angle brackets, ex: `<myVariable>`
 
 The following variables are systematically provided:
-- `{Get}`: result of last Get operation
-- `{Repeat}` the number of the current Repeat iteration, 0 indexed
+- `<Get>`: result of last Get operation
+- `<Repeat>` the number of the current Repeat iteration, 0 indexed
 
 The Sequence blocks define a new nested variable scope, inheriting any existing variables.
 
@@ -32,7 +32,7 @@ The Sequence blocks define a new nested variable scope, inheriting any existing 
 Output some lorem ipsum
 ```
 Get: https://baconipsum.com/api/?type=meat-and-filler&format=text
-Print: {Get}
+Print: <Get>
 ```
 
 Output a html body from a news site
@@ -41,10 +41,10 @@ Sequence:
   - Get: https://www.cnn.com/
     Evaluate:
       Top_Article: 
-  - Get: {Article}
+  - Get: <Article>
     Evaluate:
       Body:
-    Print: {Body}
+    Print: <Body>
 ```
 
 Download several NASA images of the day
@@ -53,6 +53,6 @@ Get: https://www.nasa.gov/multimedia/imagegallery/iotd.html
 Sequence:
   - Evaluate:
       Image: 
-    Download: {Image}
+    Download: <Image>
     Repeat: 5
 ```

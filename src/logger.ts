@@ -15,7 +15,7 @@ class Logger {
 
     private log(message: any, method: (value: any) => void): void {
         if(!this.silent) {
-            method(typeof message === 'string' ? message : JSON.stringify(message));
+            method(`${message}`);
         }
     }
 }

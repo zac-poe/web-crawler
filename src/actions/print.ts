@@ -7,7 +7,7 @@ export class PrintAction extends Action {
     }
 
     run(context: ActionContext): Promise<any> {
-        process.stdout.write(`${context.value}\n`);
+        process.stdout.write(`${this.interpolate(context.value, context.state)}\n`);
         return super.run(context);
     }
 }

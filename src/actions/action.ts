@@ -3,7 +3,7 @@ import { Block } from "../block";
 export class Action {
     protected interpolate(value: string, state: any) {
         return Object.keys(state).reduce((result, variable) => {
-            return result.replaceAll(`{${variable}}`, state[variable]);
+            return result.replaceAll(`<${variable}>`, state[variable]);
         }, value);
     }
 

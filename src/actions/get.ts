@@ -16,7 +16,7 @@ export class GetAction extends Action {
         return axios.get(value).then(result => {
             logger.info(`Get: ${value}`);
             logger.info(result);
-            return this.append(context.state, result);
+            return this.append(context.state, result.data);
         });
     }
 }
