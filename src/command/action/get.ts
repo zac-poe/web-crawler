@@ -1,7 +1,7 @@
-import { Command } from "./command";
+import { Command } from "../command";
 import { Action, ActionContext } from "./action";
 import axios from 'axios';
-import { logger } from '../logger';
+import { logger } from '../../logger';
 
 export class GetAction extends Action {
     getCommand(): string {

@@ -1,4 +1,4 @@
-import { logger } from '../logger';
+import { logger } from '../../logger';
 import { Action } from "./action";
 import { GetAction } from "./get";
 import { DownloadAction } from './download';
@@ -7,7 +7,7 @@ import { EvaluateAction } from './evaluate';
 import { SequenceAction } from "./sequence";
 import { RepeatAction } from "./repeat";
 
-class ActionFactory {
+export class ActionFactory {
     private readonly actions: any = {};
 
     constructor() {
@@ -34,5 +34,3 @@ class ActionFactory {
         return action;
     }
 }
-
-export const actionFactory: ActionFactory = new ActionFactory();

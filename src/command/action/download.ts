@@ -1,9 +1,9 @@
-import { Command } from "./command";
+import { Command } from "../command";
 import { Action, ActionContext } from "./action";
 
-export class EvaluateAction extends Action {
+export class DownloadAction extends Action {
     getCommand(): string {
-        return Command[Command.Evaluate];
+        return Command[Command.Download];
     }
 
     run(context: ActionContext): Promise<any> {

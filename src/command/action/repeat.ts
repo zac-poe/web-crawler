@@ -1,4 +1,4 @@
-import { Command } from "./command";
+import { Command } from "../command";
 import { Action, ActionContext } from "./action";
 
 export class RepeatAction extends Action {

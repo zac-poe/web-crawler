@@ -1,5 +1,5 @@
-import { EvaluateAction } from "../../src/actions/evaluate";
-import { Command } from "../../src/actions/command";
+import { EvaluateAction } from "../../../src/command/action/evaluate";
+import { Command } from "../../../src/command/command";
 
 describe('evaluate action', () => {
     it('has evaluate command', () => {

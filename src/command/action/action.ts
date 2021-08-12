@@ -1,4 +1,4 @@
-import { Block } from "../block";
+import { CommandBlock } from "../command-block";
 
 export class Action {
     protected interpolate(value: string, state: any) {
@@ -27,5 +27,5 @@ export class Action {
 export interface ActionContext {
     value: any;
     state: any;
-    block: Block;
+    block: CommandBlock;
 }

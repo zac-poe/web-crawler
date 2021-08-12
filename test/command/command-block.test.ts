@@ -1,39 +1,49 @@
-import { Block } from "../src/block";
-import { actionFactory } from "../src/actions/action-factory";
+import { ActionFactory } from "../../src/command/action/action-factory";
+import { CommandBlock } from "../../src/command/command-block";
 
-describe('block', () => {
+jest.mock("../../src/command/action/action-factory");
+
+describe('command block', () => {
+    const mockFactory = jest.fn();
     const mockExecutor = jest.fn();
 
+    const injectMocks = () => {
+        (ActionFactory as any).mock.instances[0].get = mockFactory;
+    }
+
     beforeAll(() => {
-        actionFactory.get = jest.fn().mockImplementation((action) => ({
+        mockFactory.mockImplementation((action) => ({
             run: mockExecutor
-        }));
+        }))
     });
 
     beforeEach(() => {
-        (actionFactory.get as any).mockClear();
+        (ActionFactory as any).mockClear();
+        mockFactory.mockClear();
         mockExecutor.mockClear();
     });
 
     it('retrieves action for command', async () => {
         const expectedCommand = 'some command';
 
-        const subject = new Block({
+        const subject = new CommandBlock({
             [expectedCommand]: 'value'
         });
+        injectMocks();
         
         await subject.resolve();
 
-        expect((actionFactory.get as any).mock.calls.length).toEqual(1);
-        expect((actionFactory.get as any).mock.calls[0][0]).toEqual(expectedCommand);
+        expect(mockFactory.mock.calls.length).toEqual(1);
+        expect(mockFactory.mock.calls[0][0]).toEqual(expectedCommand);
     });
 
     it('executes command with value', async () => {
         const expectedValue = 'some value';
 
-        const subject = new Block({
+        const subject = new CommandBlock({
             command: expectedValue
         });
+        injectMocks();
         
         await subject.resolve();
 
@@ -41,9 +51,10 @@ describe('block', () => {
     });
 
     it('executes with default state', async () => {
-        const subject = new Block({
+        const subject = new CommandBlock({
             Command: 'value'
         });
+        injectMocks();
         
         await subject.resolve();
 
@@ -52,8 +63,10 @@ describe('block', () => {
 
     it('executes with provided state', async () => {
         const expectedState = { a: 123 };
-        const subject = new Block({Command: 'value'},
+
+        const subject = new CommandBlock({Command: 'value'},
             expectedState);
+        injectMocks();
         
         await subject.resolve();
 
@@ -62,8 +75,9 @@ describe('block', () => {
     });
 
     it('executes with updated state', async () => {
-        const subject = new Block({Command: 'value'},
+        const subject = new CommandBlock({Command: 'value'},
             {a: 123});
+        injectMocks();
         
         subject.updateState('a', 456);
         await subject.resolve();
@@ -72,8 +86,9 @@ describe('block', () => {
     });
 
     it('executes with reset value for repeat', async () => {
-        const subject = new Block({Command: 'value'},
+        const subject = new CommandBlock({Command: 'value'},
             {Repeat: 37});
+        injectMocks();
         
         await subject.resolve();
 
@@ -81,7 +96,8 @@ describe('block', () => {
     });
 
     it('executes with block', async () => {
-        const subject = new Block({Command: 'value'});
+        const subject = new CommandBlock({Command: 'value'});
+        injectMocks();
         
         await subject.resolve();
 
@@ -89,11 +105,12 @@ describe('block', () => {
     });
 
     it('executes commands sequentially', async () => {
-        const subject = new Block({
+        const subject = new CommandBlock({
             A: 'first',
             B: 'second',
             C: 'third'
         });
+        injectMocks();
         
         await subject.resolve();
 
@@ -106,10 +123,11 @@ describe('block', () => {
     it('chains state', async () => {
         const firstStateResult = { a: '123', b: '456' };
 
-        const subject = new Block({
+        const subject = new CommandBlock({
             A: 'first',
             B: 'second'
         });
+        injectMocks();
 
         mockExecutor.mockReturnValueOnce(Promise.resolve(firstStateResult));
         

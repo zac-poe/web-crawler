@@ -1,5 +1,5 @@
-import { SequenceAction } from "../../src/actions/sequence";
-import { Command } from "../../src/actions/command";
+import { SequenceAction } from "../../../src/command/action/sequence";
+import { Command } from "../../../src/command/command";
 
 describe('sequence action', () => {
     it('has sequence command', () => {

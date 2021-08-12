@@ -1,5 +1,5 @@
-import { GetAction } from "../../src/actions/get";
-import { Command } from "../../src/actions/command";
+import { GetAction } from "../../../src/command/action/get";
+import { Command } from "../../../src/command/command";
 import axios from 'axios';
 
 jest.mock('axios');

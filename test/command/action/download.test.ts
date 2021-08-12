@@ -1,5 +1,5 @@
-import { DownloadAction } from "../../src/actions/download";
-import { Command } from "../../src/actions/command";
+import { DownloadAction } from "../../../src/command/action/download";
+import { Command } from "../../../src/command/command";
 import axios from 'axios';
 
 jest.mock('axios');

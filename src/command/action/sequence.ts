@@ -1,7 +1,7 @@
-import { Command } from "./command";
+import { Command } from "../command";
 import { Action, ActionContext } from "./action";
-import { Block } from "../block";
-import { logger } from "../logger";
+import { CommandBlock } from "../command-block";
+import { logger } from "../../logger";
 
 export class SequenceAction extends Action {
     getCommand(): string {
@@ -23,7 +23,7 @@ export class SequenceAction extends Action {
         const commands = sequence.shift();
         if(commands) {
             return this.chain(promise.then((state: any) =>
-                    new Block(commands).resolve()),
+                    new CommandBlock(commands).resolve()),
                 sequence);
         } else {
             return promise;

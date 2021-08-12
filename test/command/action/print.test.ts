@@ -1,5 +1,5 @@
-import { PrintAction } from "../../src/actions/print";
-import { Command } from "../../src/actions/command";
+import { PrintAction } from "../../../src/command/action/print";
+import { Command } from "../../../src/command/command";
 
 describe('print action', () => {
     const context = (value: any, state: any={}) => ({

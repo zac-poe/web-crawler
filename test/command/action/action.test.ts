@@ -1,4 +1,4 @@
-import { Action } from "../../src/actions/action";
+import { Action } from "../../../src/command/action/action";
 
 describe('action', () => {
     const context = (state: any) => ({

@@ -1,10 +1,11 @@
-import { logger } from './logger';
-import { actionFactory } from "./actions/action-factory";
-import { Command } from './actions/command';
+import { logger } from '../logger';
+import { ActionFactory } from "./action/action-factory";
+import { Command } from './command';
 
-export class Block {
+export class CommandBlock {
     private readonly commandSequence: CommandPair[];
     private readonly state: any;
+    private readonly actionFactory: ActionFactory;
 
     constructor(commands: any, state: any={}) {
         this.commandSequence = this.parse(commands);
@@ -12,6 +13,7 @@ export class Block {
             ...state,
             [Command[Command.Repeat]]: 0
         };
+        this.actionFactory = new ActionFactory();
     }
 
     async resolve(): Promise<any> {
@@ -36,7 +38,7 @@ export class Block {
         const action = actions.shift();
         if(action) {
             return this.chain(promise.then((state: any) => 
-                actionFactory.get(action.name).run({
+                this.actionFactory.get(action.name).run({
                     block: this,
                     state: state,
                     value: action.value

@@ -1,5 +1,5 @@
-import { RepeatAction } from "../../src/actions/repeat";
-import { Command } from "../../src/actions/command";
+import { RepeatAction } from "../../../src/command/action/repeat";
+import { Command } from "../../../src/command/command";
 
 describe('repeat action', () => {
     it('has repeat command', () => {
