@@ -28,7 +28,7 @@ export class ActionFactory {
     get(command: string): Action {
         const action = this.actions[command];
         if(!action) {
-            logger.warn(`Unknown command: ${command}`);
+            logger.warn('Unknown command: %s', command);
             return this.actions[undefined as any];
         }
         return action;

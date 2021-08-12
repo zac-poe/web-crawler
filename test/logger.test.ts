@@ -42,4 +42,46 @@ describe('logger', () => {
 
         expect(mockConsole.mock.calls[0][0]).toEqual('this...');
     });
+
+    it('formats objects', () => {
+        logger.info({a:123});
+
+        expect(mockConsole.mock.calls[0][0]).toEqual('{\n'
+            + '  "a": 123\n'
+            + '}');
+    });
+
+    it('formats object arguments', () => {
+        logger.info('value: %s', {a:'result'});
+
+        expect(mockConsole.mock.calls[0][1]).toEqual('{\n'
+            + '  "a": "result"\n'
+            + '}');
+    });
+
+    it('formats list arguments', () => {
+        logger.info('value: %s', ['a','b','c']);
+
+        expect(mockConsole.mock.calls[0][1]).toEqual('[\n'
+            + '  "a",\n'
+            + '  "b",\n'
+            + '  "c"\n'
+            + ']');
+    });
+
+    it('truncates arguments', () => {
+        logger.maxLengthInfo = 10;
+        logger.info('value: %s', 'a really long option');
+
+        expect(mockConsole.mock.calls[0][1]).toEqual('a really l...');
+    });
+
+    it('truncates formatted object arguments', () => {
+        logger.maxLengthInfo = 10;
+        logger.info('value: %s', {name: 'this is a way too long value to print'});
+
+        expect(mockConsole.mock.calls[0][1]).toEqual('{\n'
+            + '  "name": "this is a ..."\n'
+            + '}');
+    });
 });

@@ -18,7 +18,7 @@ export class CommandBlock {
 
     async resolve(): Promise<any> {
         return new Promise(resolve => {
-            logger.info(`Beginning commands: ${JSON.stringify(this.commandSequence, null, '  ')}`);
+            logger.info('Processing commands: %s', this.commandSequence);
             resolve(this.chain(Promise.resolve(this.state), this.commandSequence));
         });
     }

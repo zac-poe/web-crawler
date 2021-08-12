@@ -13,8 +13,8 @@
     "build:full": "npm test && npm run build",
     "build": "npm run clean && npm run build:compile",
     "build:compile": "tsc -b",
-    "test": "npm run test:local -- --silent",
-    "test:local": "jest"
+    "test": "npm run test:jest -- --silent",
+    "test:jest": "jest"
   },
   "dependencies": {
     "@types/node": "^15.12.2",

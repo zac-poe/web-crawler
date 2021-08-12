@@ -18,15 +18,18 @@ export class EvaluateAction extends Action {
 
         const xmlBody = toXml(parseHtml(context.state[Command[Command.Get]] ?? ''))
             .replaceAll(/xmlns(?:[^"']+['"]){2}/g, '');
-        logger.info(`Evaluating variables against: ${xmlBody}`);
-        const xmlDocument = new DOMParser().parseFromString(xmlBody);
+        logger.info('Evaluating variables against: %s', xmlBody);
+        const xmlDocument = new DOMParser({
+            errorHandler: { warning: logger.warn }
+        }).parseFromString(xmlBody);
 
         for(const variable of Object.keys(context.value)) {
-            context.state[variable] = select(this.interpolate(context.value[variable],
-                        context.state), xmlDocument)
+            const expression = this.interpolate(context.value[variable], context.state);
+            logger.info('Evaluating: %s', expression);
+            context.state[variable] = select(expression, xmlDocument)
                     .map((result: any) => result.hasOwnProperty('value') ? result.value : result)
                     .join('');
-            logger.info(`${variable}: ${context.state[variable]}`);
+            logger.info('%s: %s', variable, context.state[variable]);
         }
 
         return Promise.resolve(context.state);

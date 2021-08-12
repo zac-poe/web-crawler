@@ -18,7 +18,7 @@ export class SequenceAction extends Action {
             })
             .then(() => this.chain(Promise.resolve(context.state), context.value))
             .then((sequenceResult) => {
-                logger.info(`Completed Sequence: ${JSON.stringify(sequenceResult)}`);
+                logger.info('Completed Sequence: %s', sequenceResult);
                 return context.state;
             });
     }
