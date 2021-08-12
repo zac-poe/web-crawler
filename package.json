@@ -26,12 +26,10 @@
     "fs": "^0.0.1-security",
     "axios": "^0.21.1",
     "xpath": "^0.0.32",
-    "@types/parse5": "^6.0.1",
-    "parse5": "^6.0.1",
-    "@types/xmlserializer": "^0.6.2",
-    "xmlserializer": "^0.6.1",
     "@types/xmldom": "^0.1.31",
-    "xmldom": "^0.6.0"
+    "xmldom": "^0.6.0",
+    "@types/he": "^1.1.2",
+    "he": "^1.2.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",

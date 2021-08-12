@@ -37,7 +37,7 @@ describe('evaluate action', () => {
 
         const subject = new EvaluateAction();
 
-        const result = await subject.run(context({[variable]: '//body/div/@id'},
+        const result = await subject.run(context({[variable]: '/div/@id'},
             `<div id=${expectedResult}>text</div>`));
 
         expect(result[variable]).toEqual(expectedResult);
@@ -70,5 +70,48 @@ describe('evaluate action', () => {
             { Repeat: 2 }));
 
         expect(result[variable]).toEqual(expectedResult);
+    });
+
+    it('omits whitespace from evaluation', async () => {
+        const variable = 'result';
+
+        const subject = new EvaluateAction();
+
+        const result = await subject.run(context({[variable]: '//div/text()'},
+            '<div>\n</div><div>value</div><div>   </div>'));
+
+        expect(result[variable]).toEqual('value');
+    });
+
+    it('handles no respose', async () => {
+        const variable = 'result';
+
+        const subject = new EvaluateAction();
+
+        const result = await subject.run(context({[variable]: '//body/text()'}));
+
+        expect(result[variable]).toEqual('');
+    });
+
+    it('handles unmatched result', async () => {
+        const variable = 'result';
+
+        const subject = new EvaluateAction();
+
+        const result = await subject.run(context({[variable]: '//span'},
+            '<div>value</div>'));
+
+        expect(result[variable]).toEqual('');
+    });
+
+    it('decodes html', async () => {
+        const variable = 'result';
+
+        const subject = new EvaluateAction();
+
+        const result = await subject.run(context({[variable]: '//div/text()'},
+            '<div>name &copy;</div>'));
+
+        expect(result[variable]).toEqual('name ©');
     });
 });

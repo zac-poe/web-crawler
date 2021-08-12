@@ -1,0 +1,8 @@
+Sequence:
+  - Get: https://www.cbsnews.com/
+    Evaluate:
+      Latest_Article: //section[@id='component-latest-news']//article[1]//a/@href
+  - Get: <Latest_Article>
+    Evaluate:
+      Body: //section[@class='content__body'][1]//text()
+    Print: <Body>
