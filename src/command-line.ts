@@ -11,15 +11,19 @@ export class CommandLine {
         {header: "Web Crawler", content: "Accepts a path and walks it sequentially"},
         {header: "Options", optionList: this.options},
     ];
-    readonly arguments;
+    readonly arguments: any;
     readonly isValid: boolean;
 
     constructor() {
         const usageMessage = cli_usage(this.usage);
 
-        this.arguments = cli(this.options);
-
-        this.isValid = !!(!this.arguments.help && this.arguments.file);
+        try {
+            this.arguments = cli(this.options);
+            this.isValid = !!(!this.arguments.help && this.arguments.file);
+        } catch(e) {
+            this.isValid = false;
+            this.arguments = {};
+        }
 
         if(!this.isValid) {
             process.stdout.write(usageMessage + '\n');

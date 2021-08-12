@@ -32,4 +32,9 @@ describe('command line support', () => {
         expect(result.isValid).toEqual(true);
         expect(Object.keys(result.arguments)?.length > 0).toBeTruthy();
     });
+
+    it('is invalid when unable to parse options', () => {
+        mockCli.mockImplementation(() => { throw new Error() });
+        expect(new CommandLine().isValid).toEqual(false);
+    });
 });
