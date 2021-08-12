@@ -22,7 +22,7 @@ export class CommandLine {
         this.isValid = !!(!this.arguments.help && this.arguments.file);
 
         if(!this.isValid) {
-            console.log(usageMessage);
+            process.stdout.write(usageMessage + '\n');
         }
     }
 }

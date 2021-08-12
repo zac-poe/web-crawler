@@ -1,5 +1,6 @@
 import * as yaml from 'yaml';
 import * as fs from 'fs';
+import { logger } from './logger';
 
 export class FileReader {
     readonly content: any;
@@ -14,7 +15,7 @@ export class FileReader {
         try {
             this.content = yaml.parse(fileContent);
         } catch(e) {
-            console.error(e);
+            logger.error(e);
             throw new Error('Failed to parse provided YAML -- see above for details');
         }
     }

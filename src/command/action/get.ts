@@ -13,6 +13,7 @@ export class GetAction extends Action {
         if(!value) {
             return Promise.reject(`${this.getCommand()} command requires url`);
         }
+        
         return new Promise<void>(resolve => {
             logger.info(`Get: ${value}`);
             resolve();

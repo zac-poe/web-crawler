@@ -58,7 +58,7 @@ describe('command block', () => {
         
         await subject.resolve();
 
-        expect(mockExecutor.mock.calls[0][0].state).toEqual({Repeat: 0});
+        expect(mockExecutor.mock.calls[0][0].state).toEqual({Repeat: 1});
     });
 
     it('executes with provided state', async () => {
@@ -92,7 +92,7 @@ describe('command block', () => {
         
         await subject.resolve();
 
-        expect(mockExecutor.mock.calls[0][0].state).toEqual({Repeat: 0});
+        expect(mockExecutor.mock.calls[0][0].state).toEqual({Repeat: 1});
     });
 
     it('executes with block', async () => {

@@ -10,13 +10,17 @@ class Logger {
     }
 
     error(message: any): void {
-        this.log(message, console.error);
+        console.error(this.loggable(message));
     }
 
     private log(message: any, method: (value: any) => void): void {
         if(!this.silent) {
-            method(`${message}`);
+            method(this.loggable(message));
         }
+    }
+
+    private loggable(message: any): string {
+        return `${message}`;
     }
 }
 

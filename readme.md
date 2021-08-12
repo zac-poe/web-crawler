@@ -27,7 +27,7 @@ Interpolate variables with angle brackets, ex: `<myVariable>`
 
 The following variables are systematically provided:
 - `<Get>`: result of last Get operation
-- `<Repeat>` the number of the current Repeat iteration, 0 indexed
+- `<Repeat>` the number of the current Repeat iteration, this first iteration is 1
 
 The Sequence blocks define a new nested variable scope, inheriting any existing variables.
 

@@ -7,7 +7,7 @@ export class RepeatAction extends Action {
     }
 
     run(context: ActionContext): Promise<any> {
-        if(!Number.isInteger(context.value) || Number.parseInt(context.value) <= 0) {
+        if(!Number.isInteger(context.value) || Number.parseInt(context.value) < 1) {
             return Promise.reject(`${this.getCommand} requires positive whole number`);
         }
         const current = context.state[this.getCommand()];

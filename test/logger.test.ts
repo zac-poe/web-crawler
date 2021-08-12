@@ -23,4 +23,13 @@ describe('logger', () => {
 
         expect(mockConsole.mock.calls.length).toEqual(0);
     });
+
+    it('error still logs when silent', () => {
+        const mockError = console.error = jest.fn();
+
+        logger.silent = true;
+        logger.error('some failure');
+
+        expect(mockError.mock.calls.length).toEqual(1);
+    });
 });

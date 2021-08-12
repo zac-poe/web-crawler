@@ -11,7 +11,7 @@ export class CommandBlock {
         this.commandSequence = this.parse(commands);
         this.state = {
             ...state,
-            [Command[Command.Repeat]]: 0
+            [Command[Command.Repeat]]: 1
         };
         this.actionFactory = new ActionFactory();
     }
