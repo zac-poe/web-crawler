@@ -35,3 +35,7 @@ The Sequence blocks define a new nested variable scope, inheriting any existing 
 - Output some lorem ipsum: [lorem-ipsum.yaml](samples/lorem-ipsum.yaml)
 - Output a html body from a news site: [news.yaml](samples/news.yaml)
 - Download several NASA images of the day [nasa-iotd.yaml](samples/nasa-iotd.yaml)
+
+### XPath Resources
+- https://extendsclass.com/xpath-tester.html
+- https://devhints.io/xpath

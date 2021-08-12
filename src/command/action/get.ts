@@ -15,7 +15,7 @@ export class GetAction extends Action {
         }
         
         return new Promise<void>(resolve => {
-            logger.info('Get: %s', value);
+            logger.info(`${this.getCommand()}: %s`, value);
             resolve();
         }).then(() => axios.get(value)).then(result => {
             result = result?.data;

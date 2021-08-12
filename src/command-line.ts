@@ -1,5 +1,5 @@
-import * as cli from 'command-line-args';
-import * as cli_usage from 'command-line-usage';
+import command_line_args from 'command-line-args';
+import command_line_usage from 'command-line-usage';
 
 export class CommandLine {
     private readonly options = [
@@ -15,10 +15,10 @@ export class CommandLine {
     readonly isValid: boolean;
 
     constructor() {
-        const usageMessage = cli_usage(this.usage);
+        const usageMessage = command_line_usage(this.usage);
 
         try {
-            this.arguments = cli(this.options);
+            this.arguments = command_line_args(this.options);
             this.isValid = !!(!this.arguments.help && this.arguments.file);
         } catch(e) {
             this.isValid = false;

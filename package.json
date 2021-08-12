@@ -25,6 +25,7 @@
     "yaml": "^1.10.2",
     "fs": "^0.0.1-security",
     "axios": "^0.21.1",
+    "js-file-download": "^0.4.12",
     "xpath": "^0.0.32",
     "@types/xmldom": "^0.1.31",
     "xmldom": "^0.6.0",
