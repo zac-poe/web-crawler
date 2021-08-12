@@ -12,9 +12,13 @@ export class SequenceAction extends Action {
         if(!Array.isArray(context.value)) {
             return Promise.reject(`${this.getCommand} requires a list`);
         }
-        return this.chain(Promise.resolve(context.state), context.value)
+        return new Promise<void>(resolve => {
+                logger.info("Beginning Sequence");
+                resolve();
+            })
+            .then(() => this.chain(Promise.resolve(context.state), context.value))
             .then((sequenceResult) => {
-                logger.info(`Completed sequence: ${JSON.stringify(sequenceResult)}`);
+                logger.info(`Completed Sequence: ${JSON.stringify(sequenceResult)}`);
                 return context.state;
             });
     }
@@ -23,7 +27,7 @@ export class SequenceAction extends Action {
         const commands = sequence.shift();
         if(commands) {
             return this.chain(promise.then((state: any) =>
-                    new CommandBlock(commands).resolve()),
+                    new CommandBlock(commands, state).resolve()),
                 sequence);
         } else {
             return promise;
