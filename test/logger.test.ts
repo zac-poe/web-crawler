@@ -6,6 +6,7 @@ describe('logger', () => {
     beforeEach(() => {
         mockConsole.mockClear();
         logger.silent = false;
+        logger.maxLengthInfo = 500;
     });
 
     it('logs when not silent', () => {
@@ -31,5 +32,14 @@ describe('logger', () => {
         logger.error('some failure');
 
         expect(mockError.mock.calls.length).toEqual(1);
+    });
+
+    it('truncates long info messages', () => {
+        const message = 'this is a very, very, very, long message';
+
+        logger.maxLengthInfo = 4;
+        logger.info(message);
+
+        expect(mockConsole.mock.calls[0][0]).toEqual('this...');
     });
 });

@@ -1,5 +1,6 @@
 class Logger {
     silent: boolean = true;
+    maxLengthInfo: number = 500;
 
     info(message: any): void {
         this.log(message, console.info);
@@ -20,7 +21,10 @@ class Logger {
     }
 
     private loggable(message: any): string {
-        return `${message}`;
+        const result = `${message}`;
+        return result.length > this.maxLengthInfo
+            ? result.substring(0, this.maxLengthInfo) + '...'
+            : result;
     }
 }
 
