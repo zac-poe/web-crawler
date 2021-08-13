@@ -32,9 +32,10 @@ export class EvaluateAction extends Action {
         for(const variable of Object.keys(context.value)) {
             const expression = this.interpolate(context.value[variable], context.state);
             logger.info('Evaluating: %s', expression);
-            let xmlResult = '';
+            let xmlResult:any = '';
             try {
-                xmlResult = select(expression, xmlDocument)
+                xmlResult = select(expression, xmlDocument);
+                xmlResult = (Array.isArray(xmlResult) ? xmlResult : [xmlResult])
                     .map((result: any) => result.hasOwnProperty('value') ? result.value : result)
                     .filter((result: any) => !result.toString().match(/^\s*$/))
                     .join('');

@@ -126,4 +126,15 @@ describe('evaluate action', () => {
 
         expect(result[variable]).toEqual(expectedResult);
     });
+
+    it('evaluates single results', async () => {
+        const variable = 'substr';
+
+        const subject = new EvaluateAction();
+
+        const result = await subject.run(context({[variable]: 'substring(/div/@id,1,2)'},
+            `<div id=12345>text</div>`));
+
+        expect(result[variable]).toEqual('12');
+    });
 });
