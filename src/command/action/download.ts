@@ -1,9 +1,9 @@
 import { Command } from "../command";
 import { Action, ActionContext } from "./action";
 import axios from 'axios';
-import js_file_download from 'js-file-download';
 import { logger } from '../../logger';
 import path from 'path';
+import fs from 'fs';
 
 export class DownloadAction extends Action {
     getCommand(): string {
@@ -20,10 +20,14 @@ export class DownloadAction extends Action {
             logger.info(`${this.getCommand()}: %s`, value);
             resolve();
         }).then(() => axios.get(value, {
-            responseType: 'blob'
-        })).then(response => {
+            responseType: 'stream'
+        })).then(async response => {
             const fileName = path.parse(value).base;
-            js_file_download(response.data, fileName);
+            const fileWriter = fs.createWriteStream(fileName);
+            response.data.pipe(fileWriter);
+            await new Promise(resolve => {
+                fileWriter.on('finish', resolve);
+            });
             logger.info('saved as: %s', fileName);
             return context.state;
         });
