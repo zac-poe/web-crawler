@@ -24,15 +24,15 @@ class Logger {
         if(Array.isArray(message)) {
             return this.stringify(message);
         }
-        if(typeof message === 'object') {
+        if(typeof message === 'object' && message !== null) {
             return this.stringify(Object.keys(message).reduce((result: any, key: any) => {
                     result[key] = this.loggable(message[key], true);
                     return result;
                 }, {}));
         }
         const result = allowNonString ? message : `${message}`;
-        return result.toString().length > this.maxLengthInfo
-            ? result.toString().substring(0, this.maxLengthInfo) + '...'
+        return `${result}`.length > this.maxLengthInfo
+            ? `${result}`.substring(0, this.maxLengthInfo) + '...'
             : result;
     }
 

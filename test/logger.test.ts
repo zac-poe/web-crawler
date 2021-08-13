@@ -69,6 +69,18 @@ describe('logger', () => {
             + ']');
     });
 
+    it('formats undefined arguments', () => {
+        logger.info('a', undefined);
+
+        expect(mockConsole.mock.calls[0][1]).toEqual('undefined');
+    });
+
+    it('formats null arguments', () => {
+        logger.info('a', null);
+
+        expect(mockConsole.mock.calls[0][1]).toEqual('null');
+    });
+
     it('truncates arguments', () => {
         logger.maxLengthInfo = 10;
         logger.info('value: %s', 'a really long option');
