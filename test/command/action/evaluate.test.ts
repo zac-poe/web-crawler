@@ -114,4 +114,16 @@ describe('evaluate action', () => {
 
         expect(result[variable]).toEqual('name ©');
     });
+
+    it('evaluates json', async () => {
+        const variable = 'Result',
+            expectedResult = '12345';
+
+        const subject = new EvaluateAction();
+
+        const result = await subject.run(context({[variable]: '//items[2]/id/text()'},
+            JSON.stringify({payload:{items:[{id:"abc"},{id:expectedResult}]}})));
+
+        expect(result[variable]).toEqual(expectedResult);
+    });
 });

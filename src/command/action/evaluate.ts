@@ -4,6 +4,7 @@ import { DOMParser } from 'xmldom';
 import { select } from 'xpath';
 import { logger } from "../../logger";
 import { decode } from 'he';
+import { parse as toXml } from 'js2xmlparser';
 
 export class EvaluateAction extends Action {
     getCommand(): string {
@@ -15,8 +16,18 @@ export class EvaluateAction extends Action {
             return Promise.reject(`${this.getCommand()} requires key/values`);
         }
 
+        let xml = context.state[Command[Command.Get]] ?? '';
+
+        try {
+            xml = JSON.parse(xml);
+            logger.info('Evaluating from JSON response');
+            xml = toXml('root', xml);
+        } catch(e) {
+            //nothing to do - proceed for html/xml
+        }
+
         const xmlParser = new DOMParser({errorHandler: {warning: undefined}});
-        const xmlDocument = xmlParser.parseFromString(context.state[Command[Command.Get]] ?? '');
+        const xmlDocument = xmlParser.parseFromString(xml);
 
         for(const variable of Object.keys(context.value)) {
             const expression = this.interpolate(context.value[variable], context.state);
@@ -28,7 +39,7 @@ export class EvaluateAction extends Action {
                     .filter((result: any) => !result.toString().match(/^\s*$/))
                     .join('');
             } catch(e) {
-                logger.warn(e);
+                logger.warn(e.message);
             }
             context.state[variable] = decode(decode(xmlResult)); //decode xml, then html
             logger.info('%s: %s', variable, context.state[variable]);
