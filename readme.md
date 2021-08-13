@@ -20,7 +20,7 @@ Define your sequential crawler commands in yaml
 - `Download`: saves target resource
 - `Evaluate`: define name/values where name is a variable you create and the value is an xpath expression to evaluate against a previous result
 - `Print`: write value to standard out
-- `Repeat`: number of times to repeat previous level of commands, Repeat: 1 means execute commands a total of 2 times
+- `Repeat`: number of times to repeat previous commands within the current Sequence, Repeat: 1 means execute commands a total of 2 times
 
 ### Variables
 Interpolate variables with angle brackets, ex: `<myVariable>`
@@ -29,7 +29,9 @@ The following variables are systematically provided:
 - `<Get>`: result of last Get operation
 - `<Repeat>` the number of the current Repeat iteration, starting with 1
 
-The Sequence blocks define a new nested variable scope, inheriting any existing variables.
+If you so choose, you can overwrite the systematically provided values with an `Evaluate` block.
+
+Each Sequence blocks define a new nested variable scope, inheriting any existing variables, as well as resetting Repeat to 1.
 
 ### Samples
 - Output some lorem ipsum: [lorem-ipsum.yaml](samples/lorem-ipsum.yaml)
