@@ -11,7 +11,7 @@ class Logger {
     }
 
     error(message: any, ...args: any[]): void {
-        console.error(this.loggable(message), ...args);
+        console.error(message, ...args);
     }
 
     private log(message: any, method: (value: any, ...args: any[]) => void, args: any[]): void {

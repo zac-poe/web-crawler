@@ -8,5 +8,7 @@ const cli = new CommandLine();
 if(cli.isValid) {
     logger.silent = !cli.arguments.verbose;
     
-    new CommandBlock(new FileReader(cli.arguments.file).content).resolve();
+    new CommandBlock(new FileReader(cli.arguments.file).content)
+        .resolve()
+        .catch(e => console.error(e));
 }
