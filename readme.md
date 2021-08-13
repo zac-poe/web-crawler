@@ -20,14 +20,14 @@ Define your sequential crawler commands in yaml
 - `Download`: saves target resource
 - `Evaluate`: define name/values where name is a variable you create and the value is an xpath expression to evaluate against a previous result
 - `Print`: write value to standard out
-- `Repeat`: number of times to repeat current level of actions
+- `Repeat`: number of times to repeat previous level of commands, Repeat: 1 means execute commands a total of 2 times
 
 ### Variables
 Interpolate variables with angle brackets, ex: `<myVariable>`
 
 The following variables are systematically provided:
 - `<Get>`: result of last Get operation
-- `<Repeat>` the number of the current Repeat iteration, this first iteration is 1
+- `<Repeat>` the number of the current Repeat iteration, starting with 1
 
 The Sequence blocks define a new nested variable scope, inheriting any existing variables.
 

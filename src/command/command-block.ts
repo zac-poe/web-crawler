@@ -20,7 +20,7 @@ export class CommandBlock {
         return new Promise(resolve => {
             logger.info('Processing commands: %s\nwith variables: %s',
                 this.commandSequence, this.state);
-            resolve(this.chain(Promise.resolve(this.state), this.commandSequence));
+            resolve(this.chain(Promise.resolve(this.state), [...this.commandSequence]));
         });
     }
 
