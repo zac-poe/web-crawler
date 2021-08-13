@@ -19,9 +19,11 @@ export class DownloadAction extends Action {
         return new Promise<void>(resolve => {
             logger.info(`${this.getCommand()}: %s`, value);
             resolve();
-        }).then(() => axios.get(value, {
-            responseType: 'stream'
-        })).then(async response => {
+        }).then(() => axios.get(value, {responseType: 'stream'})
+            .catch(failure => {
+                return Promise.reject(`${failure.message}: ${value}`);
+            })
+        ).then(async response => {
             const fileName = path.parse(value).base;
             const fileWriter = fs.createWriteStream(fileName);
             response.data.pipe(fileWriter);

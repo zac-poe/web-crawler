@@ -30,7 +30,7 @@ describe('download action', () => {
         expect(new DownloadAction().getCommand()).toEqual(Command[Command.Download]);
     });
 
-    it('get fails without url', async () => {
+    it('download fails without url', async () => {
         const subject = new DownloadAction();
 
         await expect(subject.run(context(''))).rejects.not.toBeUndefined();
@@ -39,11 +39,11 @@ describe('download action', () => {
     it('get failures fail action', async () => {
         const failure = "some failure";
 
-        mockRequest.mockRejectedValue(failure);
+        mockRequest.mockRejectedValue({message: failure});
 
         const subject = new DownloadAction();
 
-        await expect(subject.run(context('url'))).rejects.toEqual(failure);
+        await expect(subject.run(context('url'))).rejects.toMatch(/.*failure.*/);
     });
 
     it('downloads file', async () => {

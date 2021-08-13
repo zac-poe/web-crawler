@@ -17,7 +17,11 @@ export class GetAction extends Action {
         return new Promise<void>(resolve => {
             logger.info(`${this.getCommand()}: %s`, value);
             resolve();
-        }).then(() => axios.get(value)).then(result => {
+        }).then(() => axios.get(value)
+            .catch(failure => {
+                return Promise.reject(`${failure.message}: ${value}`);
+            })
+        ).then(result => {
             let body = result?.data;
             if(typeof body === 'object') {
                 body = JSON.stringify(body);

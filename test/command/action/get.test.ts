@@ -13,7 +13,7 @@ describe('get action', () => {
     });
 
     beforeEach(() => {
-        mockRequest.mockClear();
+        mockRequest.mockReset();
     });
 
     it('has get command', () => {
@@ -50,11 +50,11 @@ describe('get action', () => {
     it('get failures fail crawler', async () => {
         const failure = "some failure";
 
-        mockRequest.mockRejectedValue(failure);
+        mockRequest.mockRejectedValue({message: failure});
 
         const subject = new GetAction();
 
-        await expect(subject.run(context('url'))).rejects.toEqual(failure);
+        await expect(subject.run(context('url'))).rejects.toEqual(`${failure}: url`);
     });
 
     it('request interpolated url', async () => {
