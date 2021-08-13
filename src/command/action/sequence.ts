@@ -10,7 +10,7 @@ export class SequenceAction extends Action {
 
     run(context: ActionContext): Promise<any> {
         if(!Array.isArray(context.value)) {
-            return Promise.reject(`${this.getCommand} requires a list`);
+            return Promise.reject(`${this.getCommand()} requires a list`);
         }
         return new Promise<void>(resolve => {
                 logger.info("Beginning Sequence");

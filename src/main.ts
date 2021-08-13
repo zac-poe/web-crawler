@@ -10,5 +10,9 @@ if(cli.isValid) {
     
     new CommandBlock(new FileReader(cli.arguments.file).content)
         .resolve()
-        .catch(e => console.error(e));
+        .catch(e => {
+            logger.error("Web crawler failed to complete provided commands!")
+            logger.error(e);
+            process.exitCode = 1;
+        });
 }
