@@ -68,4 +68,12 @@ describe('get action', () => {
 
         expect(mockRequest.mock.calls[0][0]).toEqual('http://some value/path');
     });
+
+    it('appends json result as string to state', async () => {
+        mockRequest.mockReturnValue(Promise.resolve({data: {a: 123, b: "value"}}));
+
+        const result = await new GetAction().run(context('url'));
+
+        expect(result[Command[Command.Get]]).toEqual('{"a":123,"b":"value"}');
+    });
 });

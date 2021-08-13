@@ -18,9 +18,12 @@ export class GetAction extends Action {
             logger.info(`${this.getCommand()}: %s`, value);
             resolve();
         }).then(() => axios.get(value)).then(result => {
-            result = result?.data;
-            logger.info(result);
-            return this.append(context.state, result);
+            let body = result?.data;
+            if(typeof body === 'object') {
+                body = JSON.stringify(body);
+            }
+            logger.info(body);
+            return this.append(context.state, body);
         });
     }
 }
