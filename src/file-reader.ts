@@ -3,20 +3,24 @@ import * as fs from 'fs';
 import { logger } from './logger';
 
 export class FileReader {
-    readonly content: any;
+    private readonly file: string;
 
     constructor(file: string) {
+        this.file = file;
+    }
+
+    getContent(): Promise<any> {
         let fileContent;
         try {
-            fileContent = fs.readFileSync(file, 'utf8');
+            fileContent = fs.readFileSync(this.file, 'utf8');
         } catch(e) {
-            throw new Error(`Unable to read file: ${file}`)
+            return Promise.reject(`Unable to read file: ${this.file}`);
         }
         try {
-            this.content = yaml.parse(fileContent);
+            return Promise.resolve(yaml.parse(fileContent));
         } catch(e) {
-            logger.error(e);
-            throw new Error('Failed to parse provided YAML -- see above for details');
+            logger.error(e.message);
+            return Promise.reject('Failed to parse provided YAML -- see above for details');
         }
     }
 }

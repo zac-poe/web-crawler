@@ -8,11 +8,11 @@ const cli = new CommandLine();
 if(cli.isValid) {
     logger.silent = !cli.arguments.verbose;
     
-    new CommandBlock(new FileReader(cli.arguments.file).content)
-        .resolve()
-        .catch(e => {
-            logger.error("Error: Failed to complete provided commands!")
-            logger.error(e);
-            process.exitCode = 1;
-        });
+    new FileReader(cli.arguments.file).getContent()
+    .then((content: any) => new CommandBlock(content).resolve())
+    .catch(e => {
+        logger.error(e);
+        logger.error("Error: Failed to complete provided commands!")
+        process.exitCode = 1;
+    });
 }
