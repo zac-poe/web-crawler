@@ -27,5 +27,5 @@ export class Action {
 export interface ActionContext {
     value: any;
     state: any;
-    block: CommandBlock;
+    repeat: () => Promise<void>;
 }

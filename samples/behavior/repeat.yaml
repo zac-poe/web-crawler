@@ -1,0 +1,22 @@
+Print: first
+Commands: # inner grouping, new <Repeat> of 1
+  - Print: second
+    Repeat: 1
+  - Print: third
+  - Repeat: 2 # will repeat once, <Repeat> == 2 already
+  - Repeat: 2 # moot, <Repeat> == 3 already
+Repeat: 1 # outter grouping
+
+### behavior ###
+# first
+# second
+# second
+# third
+# second
+# third
+# first
+# second
+# second
+# third
+# second
+# third

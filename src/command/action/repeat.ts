@@ -7,17 +7,16 @@ export class RepeatAction extends Action {
         return Command[Command.Repeat];
     }
 
-    async run(context: ActionContext): Promise<any> {
+    run(context: ActionContext): Promise<any> {
         const value = this.interpolate(context.value, context.state);
         if(isNaN(value as any) || Number.parseInt(value) < 1
             || Number.parseFloat(value) != Number.parseInt(value)) {
             return Promise.reject(`${this.getCommand()} requires positive whole number, received: ${value}`);
         }
         const current = context.state[this.getCommand()];
-        logger.info('%s: %s', await this.getCommand(), current);
+        logger.info('%s: %s', this.getCommand(), current);
         if(current <= Number.parseInt(value)) {
-            context.block.updateState(this.getCommand(), current+1);
-            return context.block.resolve();
+            return context.repeat();
         }
         return super.run(context);
     }

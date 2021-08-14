@@ -1,0 +1,20 @@
+Commands:
+  # Leanne Graham
+  - Get: https://jsonplaceholder.typicode.com/users/1
+    Commands:
+        # Ervin Howell
+      - Get: https://jsonplaceholder.typicode.com/users/2
+        Evaluate:
+          second: /root/name/text()
+      - Print: <second>
+    Evaluate:
+      first: /root/name/text()
+    Print: <second> # variable no longer exists
+  - Print: <first>
+Print: <first> # variable no longer exists
+
+### behavior ###
+# Ervin Howell
+# <second>
+# Leanne Graham
+# <first>
