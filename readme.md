@@ -15,12 +15,12 @@ Alternatively, `npm install` and then `./web-crawler.js -f yourFile.yaml`
 Define your sequential crawler commands in yaml
 
 ### Commands
-- `Sequence`: list of commands - provides ability to sequentially issue multiple comands of the same type
+- `Commands`: list of commands - provides ability to list multiple comands of the same type, as well defines as a grouping for use with Repeat
 - `Get`: http get request
 - `Download`: saves target resource
 - `Evaluate`: define name/values where name is a variable you create and the value is an xpath expression to evaluate against a previous result
 - `Print`: write value to standard out
-- `Repeat`: number of times to repeat previous commands within the current Sequence, Repeat: 1 means execute commands a total of 2 times
+- `Repeat`: number of times to rerun prior Commands - Repeat: 1 means commands will run a total of 2 times
 
 ### Variables
 Interpolate variables with angle brackets, ex: `<myVariable>`
@@ -31,9 +31,10 @@ The following variables are systematically provided:
 
 If you so choose, you can overwrite the systematically provided values with an `Evaluate` block.
 
-Each Sequence blocks define a new nested variable scope, inheriting any existing variables, as well as resetting Repeat to 1.
+Each Commands blocks define a new nested variable scope, inheriting any existing variables, as well as resetting Repeat to 1.
 
 ### Samples
+- Basic command behavior: [behavior](samples/behavior/)
 - Output some lorem ipsum: [lorem-ipsum.yaml](samples/lorem-ipsum.yaml)
 - Output a html body from a news site: [news.yaml](samples/news.yaml)
 - Download several NASA images of the day [nasa-iotd.yaml](samples/nasa-iotd.yaml)
