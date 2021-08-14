@@ -3,9 +3,9 @@ import { Action, ActionContext } from "./action";
 import { CommandBlock } from "../command-block";
 import { logger } from "../../logger";
 
-export class SequenceAction extends Action {
+export class CommandsAction extends Action {
     getCommand(): string {
-        return Command[Command.Sequence];
+        return Command[Command.Commands];
     }
 
     run(context: ActionContext): Promise<any> {
@@ -13,12 +13,12 @@ export class SequenceAction extends Action {
             return Promise.reject(`${this.getCommand()} requires a list`);
         }
         return new Promise<void>(resolve => {
-                logger.info("Beginning Sequence");
+                logger.info("Beginning %s", this.getCommand());
                 resolve();
             })
             .then(() => this.chain(Promise.resolve(context.state), context.value))
-            .then((sequenceResult) => {
-                logger.info('Completed Sequence: %s', sequenceResult);
+            .then((result) => {
+                logger.info('Completed %s: %s', this.getCommand(), result);
                 return context.state;
             });
     }

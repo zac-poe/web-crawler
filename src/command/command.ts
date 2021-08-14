@@ -3,6 +3,6 @@ export enum Command {
     Download,
     Evaluate,
     Print,
-    Sequence,
+    Commands,
     Repeat
 }

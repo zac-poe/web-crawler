@@ -4,7 +4,7 @@ import { GetAction } from "./get";
 import { DownloadAction } from './download';
 import { PrintAction } from './print';
 import { EvaluateAction } from './evaluate';
-import { SequenceAction } from "./sequence";
+import { CommandsAction } from "./commands";
 import { RepeatAction } from "./repeat";
 
 export class ActionFactory {
@@ -17,7 +17,7 @@ export class ActionFactory {
         this.add(new DownloadAction());
         this.add(new PrintAction());
         this.add(new EvaluateAction());
-        this.add(new SequenceAction());
+        this.add(new CommandsAction());
         this.add(new RepeatAction());
     }
 
