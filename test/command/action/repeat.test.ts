@@ -1,23 +1,29 @@
 import { ActionContext } from "../../../src/command/action/action";
 import { RepeatAction } from "../../../src/command/action/repeat";
 import { Command } from "../../../src/command/command";
+import { CommandBlock } from "../../../src/command/command-block";
+
+jest.mock("../../../src/command/command-block");
 
 describe('repeat action', () => {
-    const mockBlock = {
-        updateState: jest.fn(),
-        resolve: jest.fn()
-    };
+    const mockBlock = jest.fn();
 
-    const context = (value: number, state: any={}): ActionContext => ({
+    const context = (value: number, previous: any[]=[], state: any={}): ActionContext => ({
         value: value,
         state: {Repeat:1, ...state},
-        block: mockBlock as any
+        previousCommands: previous
+    });
+
+    beforeAll(() => {
+        (CommandBlock as any).mockImplementation(() => ({
+            resolve: mockBlock
+        }));
     });
 
     beforeEach(() => {
-        mockBlock.updateState.mockClear();
-        mockBlock.resolve.mockClear();
-    });
+        (CommandBlock as any).mockClear();
+        mockBlock.mockClear();
+    })
 
     it('has repeat command', () => {
         expect(new RepeatAction().getCommand()).toEqual(Command[Command.Repeat]);
@@ -42,15 +48,20 @@ describe('repeat action', () => {
         await expect(subject.run(context(0))).rejects.not.toBeUndefined();
     });
 
-    it('repeats block', async () => {
+    it('runs new block and returns result', async () => {
+        const commands = [{a:1}, {b:2}];
+        const expectedResult = 'some result';
+
         const subject = new RepeatAction();
+        mockBlock.mockReturnValue(Promise.resolve(expectedResult))
 
-        await subject.run(context(1));
+        const result = await subject.run(context(1, commands));
 
-        expect(mockBlock.updateState.mock.calls.length).toEqual(1);
-        expect(mockBlock.updateState.mock.calls[0][0]).toEqual('Repeat');
-        expect(mockBlock.updateState.mock.calls[0][1]).toEqual(2);
-        expect(mockBlock.resolve.mock.calls.length).toEqual(1);
+        expect((CommandBlock as any).mock.instances.length).toEqual(1);
+        expect((CommandBlock as any).mock.calls[0][0]).toStrictEqual(commands);
+        expect((CommandBlock as any).mock.calls[0][1].Repeat).toEqual(2);
+        expect(mockBlock.mock.calls.length).toEqual(1);
+        expect(result).toEqual(expectedResult);
     });
 
     it('returns state when no repetition is required', async () => {
@@ -58,10 +69,10 @@ describe('repeat action', () => {
 
         const subject = new RepeatAction();
 
-        const result = await subject.run(context(5, state));
+        const result = await subject.run(context(5, [{a:1}], state));
 
-        expect(mockBlock.updateState.mock.calls.length).toEqual(0);
-        expect(mockBlock.resolve.mock.calls.length).toEqual(0);
+        expect((CommandBlock as any).mock.instances.length).toEqual(0);
+        expect(mockBlock.mock.calls.length).toEqual(0);
         expect(result).toStrictEqual(state);
     });
 
@@ -71,9 +82,11 @@ describe('repeat action', () => {
             variable: value
         };
 
-        await new RepeatAction().run(context('<variable>' as any, state));
+        mockBlock.mockReturnValue(Promise.resolve())
 
-        expect(mockBlock.resolve.mock.calls.length).toEqual(1);
+        await new RepeatAction().run(context('<variable>' as any, [1], state));
+
+        expect(mockBlock.mock.calls.length).toEqual(1);
     });
 
     it('stops repeating using interpolated value', async () => {
@@ -83,8 +96,8 @@ describe('repeat action', () => {
             Repeat: 123
         };
 
-        await new RepeatAction().run(context('<variable>' as any, state));
+        await new RepeatAction().run(context('<variable>' as any, [1], state));
 
-        expect(mockBlock.resolve.mock.calls.length).toEqual(0);
+        expect(mockBlock.mock.calls.length).toEqual(0);
     });
 });
