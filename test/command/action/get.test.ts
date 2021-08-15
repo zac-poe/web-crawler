@@ -1,15 +1,16 @@
 import { GetAction } from "../../../src/command/action/get";
 import { Command } from "../../../src/command/command";
 import axios from 'axios';
+import { ActionContext } from "../../../src/command/action/action";
 
 jest.mock('axios');
 
 describe('get action', () => {
     const mockRequest:jest.Mock<any,any> = (axios.get as any);
-    const context = (url: string, state: any={}) => ({
+    const context = (url: string, state: any={}): ActionContext => ({
         value: url,
         state: state,
-        block: (undefined as any)
+        previousCommands: []
     });
 
     beforeEach(() => {

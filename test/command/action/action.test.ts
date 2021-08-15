@@ -1,10 +1,10 @@
-import { Action } from "../../../src/command/action/action";
+import { Action, ActionContext } from "../../../src/command/action/action";
 
 describe('action', () => {
-    const context = (state: any) => ({
+    const context = (state: any): ActionContext => ({
         value: undefined,
         state: state,
-        block: (undefined as any)
+        previousCommands: []
     });
 
     it('has no command', () => {

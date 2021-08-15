@@ -2,6 +2,7 @@ import { DownloadAction } from "../../../src/command/action/download";
 import { Command } from "../../../src/command/command";
 import axios from 'axios';
 import fs from 'fs';
+import { ActionContext } from "../../../src/command/action/action";
 
 jest.mock('axios');
 jest.mock('fs');
@@ -9,10 +10,10 @@ jest.mock('fs');
 describe('download action', () => {
     const mockRequest:jest.Mock<any,any> = (axios.get as any);
 
-    const context = (url: string, state: any={}) => ({
+    const context = (url: string, state: any={}): ActionContext => ({
         value: url,
         state: state,
-        block: (undefined as any)
+        previousCommands: []
     });
 
     beforeAll(() => {

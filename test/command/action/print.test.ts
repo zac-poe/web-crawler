@@ -1,11 +1,12 @@
+import { ActionContext } from "../../../src/command/action/action";
 import { PrintAction } from "../../../src/command/action/print";
 import { Command } from "../../../src/command/command";
 
 describe('print action', () => {
-    const context = (value: any, state: any={}) => ({
+    const context = (value: any, state: any={}): ActionContext => ({
         value: value,
         state: state,
-        block: (undefined as any)
+        previousCommands: []
     });
 
     it('has print command', () => {

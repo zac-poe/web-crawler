@@ -9,7 +9,7 @@ describe('evaluate action', () => {
     const context = (evaluations: object, html: string='', additionalState: any={}): ActionContext => ({
         value: evaluations,
         state: {Get: html, ...additionalState},
-        block: undefined as any
+        previousCommands: []
     });
 
     it('has evaluate command', () => {
