@@ -74,34 +74,15 @@ describe('command block', () => {
         expect(stateRemainder).toEqual(expectedState);
     });
 
-    it('executes with updated state', async () => {
+    it('executes with existing value for repeat', async () => {
+        const expected = 37;
         const subject = new CommandBlock({Command: 'value'},
-            {a: 123});
-        injectMocks();
-        
-        subject.updateState('a', 456);
-        await subject.resolve();
-
-        expect(mockExecutor.mock.calls[0][0].state.a).toEqual(456);
-    });
-
-    it('executes with reset value for repeat', async () => {
-        const subject = new CommandBlock({Command: 'value'},
-            {Repeat: 37});
+            {Repeat: expected});
         injectMocks();
         
         await subject.resolve();
 
-        expect(mockExecutor.mock.calls[0][0].state).toEqual({Repeat: 1});
-    });
-
-    it('executes with block', async () => {
-        const subject = new CommandBlock({Command: 'value'});
-        injectMocks();
-        
-        await subject.resolve();
-
-        expect(mockExecutor.mock.calls[0][0].block).toEqual(subject);
+        expect(mockExecutor.mock.calls[0][0].state.Repeat).toEqual(expected);
     });
 
     it('executes commands sequentially', async () => {
@@ -120,6 +101,23 @@ describe('command block', () => {
         expect(mockExecutor.mock.calls[2][0].value).toEqual('third');
     });
 
+    it('executes command lists sequentially', async () => {
+        const subject = new CommandBlock([
+            {A: 'first'},
+            {B: 'second',C: 'third'},
+            {D: 'fourth'}
+        ]);
+        injectMocks();
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls.length).toEqual(4);
+        expect(mockExecutor.mock.calls[0][0].value).toEqual('first');
+        expect(mockExecutor.mock.calls[1][0].value).toEqual('second');
+        expect(mockExecutor.mock.calls[2][0].value).toEqual('third');
+        expect(mockExecutor.mock.calls[3][0].value).toEqual('fourth');
+    });
+
     it('chains state', async () => {
         const firstStateResult = { a: '123', b: '456' };
 
@@ -134,5 +132,23 @@ describe('command block', () => {
         await subject.resolve();
 
         expect(mockExecutor.mock.calls[1][0].state).toStrictEqual(firstStateResult);
+    });
+
+    it('retains previous commands', async () => {
+        const subject = new CommandBlock({
+            A: 'first',
+            B: 'second',
+            C: 'third'
+        });
+        injectMocks();
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].previousCommands.length).toEqual(1);
+        expect(mockExecutor.mock.calls[0][0].previousCommands[0]).toEqual({A: 'first'});
+        expect(mockExecutor.mock.calls[1][0].previousCommands.length).toEqual(2);
+        expect(mockExecutor.mock.calls[1][0].previousCommands[1]).toEqual({B:'second'});
+        expect(mockExecutor.mock.calls[2][0].previousCommands.length).toEqual(3);
+        expect(mockExecutor.mock.calls[2][0].previousCommands[2]).toEqual({C: 'third'});
     });
 });

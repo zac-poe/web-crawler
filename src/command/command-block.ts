@@ -39,7 +39,7 @@ export class CommandBlock {
                 return this.actionFactory.get(action.name).run({
                     state: state,
                     value: action.value,
-                    previousCommands: this.previousCommands
+                    previousCommands: [...this.previousCommands]
                 });
             }), actions);
         } else {
