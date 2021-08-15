@@ -3,65 +3,45 @@ import { ActionFactory } from "./action/action-factory";
 import { Command } from './command';
 
 export class CommandBlock {
-    private readonly commandSequence: CommandValue[];
-    private readonly previousCommands: CommandValue[][];
+    private readonly remainingCommands: CommandValue[];
+    private readonly previousCommands: any[];
     private readonly state: any;
     private readonly actionFactory: ActionFactory;
 
     constructor(commands: any|any[], state: any={}) {
-        this.commandSequence = this.parse(Array.isArray(commands)
-            ? commands : [commands]);
+        this.remainingCommands = (Array.isArray(commands) ? commands : [commands])
+            .flatMap(c => Object.keys(c).map(action => ({
+                name: action,
+                value: c[action]
+            })));
         this.state = {
-            ...state,
-            [Command[Command.Repeat]]: 1
+            [Command[Command.Repeat]]: 1,
+            ...state
         };
         this.actionFactory = new ActionFactory();
         this.previousCommands = [];
     }
 
     resolve(): Promise<any> {
-        return this.resolveCommands(this.commandSequence);
-    }
-
-    private resolveCommands(commands: CommandValue[]): Promise<any> {
         return new Promise(resolve => {
             logger.info('Processing commands: %s\nwith variables: %s',
-                commands, this.state);
-        this.previousCommands.unshift([]);
-            resolve(this.chain(Promise.resolve(this.state), commands));
-        }).then((result) => {
-            this.previousCommands.pop();
-            return result;
+                this.remainingCommands, this.state);
+            resolve(this.chain(Promise.resolve(this.state),
+                this.remainingCommands));
         });
-    }
-
-    private parse(commandsList: any[]): CommandValue[] {
-        return commandsList.flatMap(commands => 
-            Object.keys(commands).map(action => ({
-                name: action,
-                value: commands[action]
-            }))
-        );
-    }
-
-    private resolvePrevious(): Promise<any> {
-        this.state[Command[Command.Repeat]] += 1;
-        return this.resolveCommands(this.previousCommands[0]);
     }
 
     private chain(promise: Promise<any>, actions: CommandValue[]): Promise<any> {
         const action = actions.shift();
         if(action) {
-            return this.chain(promise.then((state: any) => 
-                this.actionFactory.get(action.name).run({
+            return this.chain(promise.then((state: any) => {
+                this.previousCommands.push({[action.name]: action.value});
+                return this.actionFactory.get(action.name).run({
                     state: state,
                     value: action.value,
-                    repeat: () => this.resolvePrevious()
-                }).then(result => {
-                    this.previousCommands[0].push(action);
-                    return result;
-                })
-            ), actions);
+                    previousCommands: this.previousCommands
+                });
+            }), actions);
         } else {
             return promise;
         }

@@ -1,5 +1,3 @@
-import { CommandBlock } from "../command-block";
-
 export class Action {
     protected interpolate(value: string, state: any) {
         if(!value?.length) {
@@ -27,5 +25,5 @@ export class Action {
 export interface ActionContext {
     value: any;
     state: any;
-    repeat: () => Promise<void>;
+    previousCommands: any[];
 }

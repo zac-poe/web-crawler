@@ -1,5 +1,6 @@
 import { logger } from "../../logger";
 import { Command } from "../command";
+import { CommandBlock } from "../command-block";
 import { Action, ActionContext } from "./action";
 
 export class RepeatAction extends Action {
@@ -16,8 +17,9 @@ export class RepeatAction extends Action {
         const current = context.state[this.getCommand()];
         logger.info('%s: %s', this.getCommand(), current);
         if(current <= Number.parseInt(value)) {
-            return context.repeat();
+            context.state[this.getCommand()] += 1;
+            return new CommandBlock(context.previousCommands, context.state).resolve();
         }
-        return super.run(context);
+        return Promise.resolve(context.state);
     }
 }
