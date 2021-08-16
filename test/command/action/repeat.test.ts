@@ -45,7 +45,6 @@ describe('repeat action', () => {
         const subject = new RepeatAction();
 
         await expect(subject.run(context(-1))).rejects.not.toBeUndefined();
-        await expect(subject.run(context(0))).rejects.not.toBeUndefined();
     });
 
     it('runs new block and returns result', async () => {
@@ -73,6 +72,19 @@ describe('repeat action', () => {
 
         expect((CommandBlock as any).mock.instances.length).toEqual(0);
         expect(mockBlock.mock.calls.length).toEqual(0);
+        expect(result).toStrictEqual(state);
+    });
+
+    it('returns state when no repeat is 0', async () => {
+        const state = { a: '123' };
+
+        const subject = new RepeatAction();
+
+        const { Repeat, ...result } = await subject.run(context(0, [{a:1}], state));
+
+        expect((CommandBlock as any).mock.instances.length).toEqual(0);
+        expect(mockBlock.mock.calls.length).toEqual(0);
+        expect(Repeat).toEqual(1);
         expect(result).toStrictEqual(state);
     });
 

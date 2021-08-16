@@ -10,7 +10,7 @@ export class RepeatAction extends Action {
 
     run(context: ActionContext): Promise<any> {
         const value = this.interpolate(context.value, context.state);
-        if(isNaN(value as any) || Number.parseInt(value) < 1
+        if(isNaN(value as any) || Number.parseInt(value) < 0
             || Number.parseFloat(value) != Number.parseInt(value)) {
             return Promise.reject(`${this.getCommand()} requires positive whole number, received: ${value}`);
         }
