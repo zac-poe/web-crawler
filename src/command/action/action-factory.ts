@@ -1,6 +1,6 @@
 import { logger } from '../../logger';
 import { Action } from "./action";
-import { GetAction } from "./get";
+import { RequestAction } from "./request";
 import { DownloadAction } from './download';
 import { PrintAction } from './print';
 import { EvaluateAction } from './evaluate';
@@ -13,7 +13,7 @@ export class ActionFactory {
     constructor() {
         //all defined actions
         this.add(new Action());
-        this.add(new GetAction());
+        this.add(new RequestAction());
         this.add(new DownloadAction());
         this.add(new PrintAction());
         this.add(new EvaluateAction());

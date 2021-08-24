@@ -1,11 +1,11 @@
-import { GetAction } from "../../../src/command/action/get";
+import { RequestAction } from "../../../src/command/action/request";
 import { Command } from "../../../src/command/command";
 import axios from 'axios';
 import { ActionContext } from "../../../src/command/action/action";
 
 jest.mock('axios');
 
-describe('get action', () => {
+describe('request action', () => {
     const mockRequest:jest.Mock<any,any> = (axios.get as any);
     const context = (url: string, state: any={}): ActionContext => ({
         value: url,
@@ -17,8 +17,8 @@ describe('get action', () => {
         mockRequest.mockReset();
     });
 
-    it('has get command', () => {
-        expect(new GetAction().getCommand()).toEqual(Command[Command.Get]);
+    it('has request command', () => {
+        expect(new RequestAction().getCommand()).toEqual(Command[Command.Request]);
     });
 
     it('gets url', async () => {
@@ -26,7 +26,7 @@ describe('get action', () => {
 
         mockRequest.mockReturnValue(Promise.resolve());
 
-        await new GetAction().run(context(expectedUrl));
+        await new RequestAction().run(context(expectedUrl));
 
         expect(mockRequest.mock.calls.length).toEqual(1);
         expect(mockRequest.mock.calls[0][0]).toEqual(expectedUrl);
@@ -37,13 +37,13 @@ describe('get action', () => {
 
         mockRequest.mockReturnValue(Promise.resolve({data: expectedResult}));
 
-        const result = await new GetAction().run(context('url'));
+        const result = await new RequestAction().run(context('url'));
 
-        expect(result[Command[Command.Get]]).toEqual(expectedResult);
+        expect(result[Command[Command.Request]]).toEqual(expectedResult);
     });
 
     it('get fails without url', async () => {
-        const subject = new GetAction();
+        const subject = new RequestAction();
 
         await expect(subject.run(context(''))).rejects.not.toBeUndefined();
     });
@@ -53,7 +53,7 @@ describe('get action', () => {
 
         mockRequest.mockRejectedValue({message: failure});
 
-        const subject = new GetAction();
+        const subject = new RequestAction();
 
         await expect(subject.run(context('url'))).rejects.toEqual(`${failure}: url`);
     });
@@ -65,7 +65,7 @@ describe('get action', () => {
 
         mockRequest.mockReturnValue(Promise.resolve());
 
-        await new GetAction().run(context('http://<variable>/path', state));
+        await new RequestAction().run(context('http://<variable>/path', state));
 
         expect(mockRequest.mock.calls[0][0]).toEqual('http://some value/path');
     });
@@ -73,8 +73,8 @@ describe('get action', () => {
     it('appends json result as string to state', async () => {
         mockRequest.mockReturnValue(Promise.resolve({data: {a: 123, b: "value"}}));
 
-        const result = await new GetAction().run(context('url'));
+        const result = await new RequestAction().run(context('url'));
 
-        expect(result[Command[Command.Get]]).toEqual('{"a":123,"b":"value"}');
+        expect(result[Command[Command.Request]]).toEqual('{"a":123,"b":"value"}');
     });
 });

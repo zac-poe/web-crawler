@@ -1,8 +1,8 @@
 Commands:
-  - Get: https://www.cbsnews.com/
+  - Request: https://www.cbsnews.com/
     Evaluate:
       Latest_Article: //section[@id='component-latest-news']//article[1]/a/@href
-  - Get: <Latest_Article>
+  - Request: <Latest_Article>
     Evaluate:
       Body: //section[contains(@class, 'content__body')][1]//text()
     Print: <Body>

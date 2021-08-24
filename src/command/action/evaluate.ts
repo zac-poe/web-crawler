@@ -16,7 +16,7 @@ export class EvaluateAction extends Action {
             return Promise.reject(`${this.getCommand()} requires key/values`);
         }
 
-        let xml = context.state[Command[Command.Get]] ?? '';
+        let xml = context.state[Command[Command.Request]] ?? '';
 
         try {
             xml = JSON.parse(xml);

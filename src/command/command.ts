@@ -1,5 +1,5 @@
 export enum Command {
-    Get,
+    Request,
     Download,
     Evaluate,
     Print,

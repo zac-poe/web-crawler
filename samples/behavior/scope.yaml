@@ -1,9 +1,9 @@
 Commands:
   # Leanne Graham
-  - Get: https://jsonplaceholder.typicode.com/users/1
+  - Request: https://jsonplaceholder.typicode.com/users/1
     Commands:
         # Ervin Howell
-      - Get: https://jsonplaceholder.typicode.com/users/2
+      - Request: https://jsonplaceholder.typicode.com/users/2
         Evaluate:
           second: /root/name/text()
       - Print: <second>

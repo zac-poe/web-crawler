@@ -1,2 +1,2 @@
-Get: https://baconipsum.com/api/?type=meat-and-filler&format=text
-Print: <Get>
+Request: https://baconipsum.com/api/?type=meat-and-filler&format=text
+Print: <Request>

@@ -3,9 +3,9 @@ import { Action, ActionContext } from "./action";
 import axios from 'axios';
 import { logger } from '../../logger';
 
-export class GetAction extends Action {
+export class RequestAction extends Action {
     getCommand(): string {
-        return Command[Command.Get];
+        return Command[Command.Request];
     }
 
     run(context: ActionContext): Promise<any> {

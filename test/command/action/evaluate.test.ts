@@ -8,7 +8,7 @@ logger.silent = false;
 describe('evaluate action', () => {
     const context = (evaluations: object, html: string='', additionalState: any={}): ActionContext => ({
         value: evaluations,
-        state: {Get: html, ...additionalState},
+        state: {Request: html, ...additionalState},
         previousCommands: []
     });
 
