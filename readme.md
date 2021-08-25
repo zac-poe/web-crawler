@@ -17,9 +17,9 @@ Define your sequential crawler commands in yaml
 ### Commands
 - `Commands`: list of commands - provides ability to list multiple comands of the same type, as well defines as a grouping for use with Repeat
 - `Request`: http request with either the string URL for a simple GET -OR- the following structure:
-  - `Type`: http request type
+  - `Method`: http request method
   - `URL`: required, the URL to make the request against
-  - `Parameters`: optionally include name/values to send with your request
+  - `Body`: optionally include a value to send with your request
 - `Download`: saves target resource
 - `Evaluate`: define name/values where name is a variable you create and the value is an xpath expression to evaluate against a previous result
 - `Print`: write value to standard out
@@ -41,7 +41,6 @@ Each Commands blocks define a new nested variable scope, inheriting any existing
 - Output some lorem ipsum: [lorem-ipsum.yaml](samples/lorem-ipsum.yaml)
 - Output a html body from a news site: [news.yaml](samples/news.yaml)
 - Download several NASA images of the day [nasa-iotd.yaml](samples/nasa-iotd.yaml)
-- Run a web search [search.yaml](samples/search.yaml)
 
 ### XPath Resources
 - https://extendsclass.com/xpath-tester.html

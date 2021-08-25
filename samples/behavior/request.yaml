@@ -1,0 +1,46 @@
+Commands:
+  - Request: https://jsonplaceholder.typicode.com/todos/1 # abbreviated form
+    Evaluate:
+      id: //userId
+    Print: "Get: <id>"
+  - Request: # same as previous
+      Method: get
+      URL: https://jsonplaceholder.typicode.com/todos/1
+    Evaluate:
+      id: //userId
+    Print: "Get: <id>"
+  - Request:
+      URL: https://httpbin.org/anything
+      Method: post
+      Body: 'hello world'
+    Evaluate:
+      method: //method/text()
+      contentType: //headers/Content-Type/text()
+      payload: //data/text()
+    Print: "<method>: <contentType>: <payload>"
+  - Request:
+      URL: https://httpbin.org/anything
+      Method: post
+      Body: '{"message": "hi"}' # send json
+    Evaluate:
+      method: //method/text()
+      contentType: //headers/Content-Type/text()
+      message: //message/text()
+    Print: "<method>: <contentType>: <message>"
+  - Request:
+      URL: https://httpbin.org/anything
+      Method: post
+      Body:
+        message: hi # same as previous, using yaml instead of a json string
+    Evaluate:
+      method: //method/text()
+      contentType: //headers/Content-Type/text()
+      message: //message/text()
+    Print: "<method>: <contentType>: <message>"
+
+### behavior ###
+# GET: 1
+# GET: 1
+# POST: application/text: hello world
+# POST: application/json: hi
+# POST: application/json: hi
