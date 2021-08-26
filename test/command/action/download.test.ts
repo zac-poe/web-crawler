@@ -37,14 +37,32 @@ describe('download action', () => {
         await expect(subject.run(context(''))).rejects.not.toBeUndefined();
     });
 
-    it('get failures fail action', async () => {
+    it('download failures do not fail action', async () => {
+        const expectedContext = {a: 'xyz'};
+
+        mockRequest.mockRejectedValue({message: "some failure"});
+
+        const subject = new DownloadAction();
+
+        expect(await subject.run(context('url', expectedContext))).toEqual(expectedContext);
+    });
+
+    it('download failures fail action when configured', async () => {
         const failure = "some failure";
 
         mockRequest.mockRejectedValue({message: failure});
 
         const subject = new DownloadAction();
 
-        await expect(subject.run(context('url'))).rejects.toMatch(/.*failure.*/);
+        await expect(subject.run(context('url', {
+            ExitOnDownloadFailure: true
+        }))).rejects.toMatch(/.*failure.*/);
+        await expect(subject.run(context('url', {
+            ExitOnDownloadFailure: 1
+        }))).rejects.toMatch(/.*failure.*/);
+        await expect(subject.run(context('url', {
+            ExitOnDownloadFailure: "true"
+        }))).rejects.toMatch(/.*failure.*/);
     });
 
     it('downloads file', async () => {
