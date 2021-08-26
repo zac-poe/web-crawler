@@ -58,7 +58,12 @@ describe('command block', () => {
         
         await subject.resolve();
 
-        expect(mockExecutor.mock.calls[0][0].state).toEqual({Repeat: 1});
+        expect(mockExecutor.mock.calls[0][0].state).toEqual({
+            Repeat: 1,
+            ExitOnRequestFailure: true,
+            ExitOnDownloadFailure: false,
+            RetryRequest: 0
+        });
     });
 
     it('executes with provided state', async () => {
@@ -70,7 +75,8 @@ describe('command block', () => {
         
         await subject.resolve();
 
-        const { Repeat, ...stateRemainder } = mockExecutor.mock.calls[0][0].state;
+        const { Repeat, ExitOnRequestFailure, ExitOnDownloadFailure, RetryRequest,
+            ...stateRemainder } = mockExecutor.mock.calls[0][0].state;
         expect(stateRemainder).toEqual(expectedState);
     });
 
@@ -83,6 +89,39 @@ describe('command block', () => {
         await subject.resolve();
 
         expect(mockExecutor.mock.calls[0][0].state.Repeat).toEqual(expected);
+    });
+
+    it('executes with existing value for exit on request failure', async () => {
+        const expected = 37;
+        const subject = new CommandBlock({Command: 'value'},
+            {ExitOnRequestFailure: expected});
+        injectMocks();
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].state.ExitOnRequestFailure).toEqual(expected);
+    });
+
+    it('executes with existing value for exit on download failure', async () => {
+        const expected = 37;
+        const subject = new CommandBlock({Command: 'value'},
+            {ExitOnDownloadFailure: expected});
+        injectMocks();
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].state.ExitOnDownloadFailure).toEqual(expected);
+    });
+
+    it('executes with existing value for request retries', async () => {
+        const expected = 37;
+        const subject = new CommandBlock({Command: 'value'},
+            {RetryRequest: expected});
+        injectMocks();
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].state.RetryRequest).toEqual(expected);
     });
 
     it('executes commands sequentially', async () => {

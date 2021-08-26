@@ -16,6 +16,9 @@ export class CommandBlock {
             })));
         this.state = {
             [Command[Command.Repeat]]: 1,
+            [Configuration[Configuration.ExitOnRequestFailure]]: true,
+            [Configuration[Configuration.ExitOnDownloadFailure]]: false,
+            [Configuration[Configuration.RetryRequest]]: 0,
             ...state
         };
         this.actionFactory = new ActionFactory();
@@ -51,4 +54,10 @@ export class CommandBlock {
 interface CommandValue {
     name: string,
     value: any
+}
+
+export enum Configuration {
+    ExitOnRequestFailure,
+    ExitOnDownloadFailure,
+    RetryRequest
 }

@@ -37,12 +37,19 @@ If you so choose, you can overwrite the systematically provided values with an `
 
 Each Commands blocks define a new nested variable scope, inheriting any existing variables, as well as resetting Repeat to 1.
 
+#### Configuration
+Additional systematically provided variables are used for configuration. The values below can be reassigned as desired, following the same nested scope described above.
+
+- `<ExitOnRequestFailure>`=true : fail the webcrawler if a Request fails
+- `<ExitOnDownloadFailure>`=false : fail the webcrawler if a Download fails
+- `<RetryRequest>`=0 : attempts to retry any Request (or Download)
+
 ### Samples
 - Basic command behavior: [behavior](samples/behavior/)
 - Output some lorem ipsum: [lorem-ipsum.yaml](samples/lorem-ipsum.yaml)
 - Output a html body from a news site: [news.yaml](samples/news.yaml)
 - Download several NASA images of the day [nasa-iotd.yaml](samples/nasa-iotd.yaml)
 
-### XPath Resources
-- https://extendsclass.com/xpath-tester.html
+## XPath Resources
+- http://xpather.com/
 - https://devhints.io/xpath
