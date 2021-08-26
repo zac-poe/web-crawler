@@ -109,7 +109,7 @@ describe('request action', () => {
         }))).rejects.not.toBeUndefined();
     });
 
-    it('web request failures fail crawler', async () => {
+    it('web request failures fail action', async () => {
         const failure = "some failure";
 
         mockRequest.mockRejectedValue({message: failure});
@@ -117,6 +117,26 @@ describe('request action', () => {
         const subject = new RequestAction();
 
         await expect(subject.run(context('url'))).rejects.toEqual(`${failure}: url`);
+    });
+
+    it('web request failures do not fail action when configured', async () => {
+        const expectedState = { var: "abcd" };
+
+        mockRequest.mockRejectedValue({message: "some failure"});
+
+        const subject = new RequestAction();
+
+        const getResult = async (value: any) => {
+            let {ExitOnRequestFailure, ...result} = await subject
+                .run(context('url', {
+                    ExitOnRequestFailure: value,
+                    ...expectedState
+                }));
+            return result;
+        };
+        expect(await getResult(false)).toEqual(expectedState);
+        expect(await getResult(0)).toEqual(expectedState);
+        expect(await getResult("false")).toEqual(expectedState);
     });
 
     it('request interpolated url', async () => {

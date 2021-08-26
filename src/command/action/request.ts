@@ -2,6 +2,7 @@ import { Command } from "../command";
 import { Action, ActionContext } from "./action";
 import axios from 'axios';
 import { logger } from '../../logger';
+import { Configuration } from '../command-block';
 
 interface Request {
     Method: string,
@@ -15,6 +16,12 @@ export class RequestAction extends Action {
     }
 
     run(context: ActionContext): Promise<any> {
+        let rejectOnFailure = context.state[Configuration[Configuration.ExitOnRequestFailure]];
+        if(typeof rejectOnFailure !== 'boolean') {
+            rejectOnFailure = rejectOnFailure !== 0
+                && rejectOnFailure !== 'false';
+        }
+
         let url: string,
             method: string='get',
             body: any='',
@@ -57,9 +64,19 @@ export class RequestAction extends Action {
                     'Content-Type': contentType
                 }
             }).catch(failure => {
-                return Promise.reject(`${failure.message}: ${url}`);
+                const failureMessage = `${failure.message}: ${url}`;
+                if(rejectOnFailure) {
+                    return Promise.reject(failureMessage);
+                } else {
+                    logger.warn(failureMessage);
+                    return Configuration.ExitOnRequestFailure;
+                }
             })
         ).then(result => {
+            if(result === Configuration.ExitOnRequestFailure) {
+                return context.state;
+            }
+
             let body = result?.data;
             if(typeof body === 'object') {
                 body = JSON.stringify(body);
