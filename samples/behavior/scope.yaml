@@ -6,15 +6,21 @@ Commands:
       - Request: https://jsonplaceholder.typicode.com/users/2
         Evaluate:
           second: /root/name/text()
+        Set:
+          third: hello
       - Print: <second>
+      - Print: <third>
     Evaluate:
       first: /root/name/text()
     Print: <second> # variable no longer exists
   - Print: <first>
+  - Print: <third> # variable no longer exists
 Print: <first> # variable no longer exists
 
 ### behavior ###
 # Ervin Howell
+# hello
 # <second>
 # Leanne Graham
+# <third>
 # <first>

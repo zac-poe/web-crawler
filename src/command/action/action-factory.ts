@@ -6,6 +6,7 @@ import { PrintAction } from './print';
 import { EvaluateAction } from './evaluate';
 import { CommandsAction } from "./commands";
 import { RepeatAction } from "./repeat";
+import { SetAction } from './set';
 
 export class ActionFactory {
     private readonly actions: any = {};
@@ -19,6 +20,7 @@ export class ActionFactory {
         this.add(new EvaluateAction());
         this.add(new CommandsAction());
         this.add(new RepeatAction());
+        this.add(new SetAction());
     }
 
     private add(action: Action) {

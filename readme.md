@@ -22,6 +22,7 @@ Define your sequential crawler commands in yaml
   - `Body`: optionally include a value to send with your request
 - `Download`: saves target resource
 - `Evaluate`: define name/values where name is a variable you create and the value is an xpath expression to evaluate against a previous result
+- `Set`: define name/values similar to evaluate, but value will be the literal provided
 - `Print`: write value to standard out
 - `Repeat`: number of times to rerun prior Commands - Repeat: 1 means commands will run a total of 2 times
 

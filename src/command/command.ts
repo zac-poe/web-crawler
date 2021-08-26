@@ -4,5 +4,6 @@ export enum Command {
     Evaluate,
     Print,
     Commands,
-    Repeat
+    Repeat,
+    Set
 }

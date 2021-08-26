@@ -1,14 +1,14 @@
 Commands:
   - Request: https://jsonplaceholder.typicode.com/todos/1 # abbreviated form
     Evaluate:
-      id: //userId
-    Print: "Get: <id>"
+      id: //userId/text()
+    Print: "GET: <id>"
   - Request: # same as previous
       Method: get
       URL: https://jsonplaceholder.typicode.com/todos/1
     Evaluate:
-      id: //userId
-    Print: "Get: <id>"
+      id: //userId/text()
+    Print: "GET: <id>"
   - Request:
       URL: https://httpbin.org/anything
       Method: post
@@ -41,6 +41,6 @@ Commands:
 ### behavior ###
 # GET: 1
 # GET: 1
-# POST: application/text: hello world
-# POST: application/json: hi
-# POST: application/json: hi
+# POST: text/plain: hello world
+# POST: text/json: hi
+# POST: text/json: hi

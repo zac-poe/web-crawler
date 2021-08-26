@@ -1,6 +1,6 @@
 import { Command } from "../command";
 import { Action, ActionContext } from "./action";
-import { DOMParser } from 'xmldom';
+import { DOMParser } from '@xmldom/xmldom';
 import { select } from 'xpath';
 import { logger } from "../../logger";
 import { decode } from 'he';
