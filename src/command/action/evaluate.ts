@@ -40,7 +40,7 @@ export class EvaluateAction extends Action {
                     .filter((result: any) => !result.toString().match(/^\s*$/))
                     .join('');
             } catch(e) {
-                logger.warn(e.message);
+                logger.warn(e?.message);
             }
             context.state[variable] = decode(decode(xmlResult)); //decode xml, then html
             logger.info('%s: %s', variable, context.state[variable]);

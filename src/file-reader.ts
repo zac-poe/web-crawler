@@ -19,7 +19,7 @@ export class FileReader {
         try {
             return Promise.resolve(yaml.parse(fileContent));
         } catch(e) {
-            logger.error(e.message);
+            logger.error(e?.message);
             return Promise.reject('Failed to parse provided YAML -- see above for details');
         }
     }
