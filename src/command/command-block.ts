@@ -1,6 +1,7 @@
 import { logger } from '../logger';
 import { ActionFactory } from "./action/action-factory";
 import { Command } from './command';
+import { Configuration } from './configuration';
 
 export class CommandBlock {
     private readonly remainingCommands: CommandValue[];
@@ -19,6 +20,7 @@ export class CommandBlock {
             [Configuration[Configuration.ExitOnRequestFailure]]: true,
             [Configuration[Configuration.ExitOnDownloadFailure]]: false,
             [Configuration[Configuration.RetryRequest]]: 0,
+            [Configuration[Configuration.RetryDelayMs]]: 1000,
             ...state
         };
         this.actionFactory = new ActionFactory();
@@ -54,10 +56,4 @@ export class CommandBlock {
 interface CommandValue {
     name: string,
     value: any
-}
-
-export enum Configuration {
-    ExitOnRequestFailure,
-    ExitOnDownloadFailure,
-    RetryRequest
 }

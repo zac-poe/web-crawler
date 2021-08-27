@@ -2,7 +2,7 @@ import { Command } from "../command";
 import { Action, ActionContext } from "./action";
 import axios from 'axios';
 import { logger } from '../../logger';
-import { Configuration } from '../command-block';
+import { Configuration } from '../configuration';
 
 interface Request {
     Method: string,
@@ -54,14 +54,12 @@ export class RequestAction extends Action {
                 logger.info(`  --> %s`, body);
             }
             resolve();
-        }).then(() => axios(url, {
-                method: method as any,
-                data: body,
-                headers: {
-                    'Content-Type': contentType
-                }
-            }).catch(failure => {
-                const failureMessage = `${failure.message}: ${url}`;
+        }).then(() => this.retry(
+                () => this.request(url, method, body, contentType),
+                context.state[Configuration[Configuration.RetryRequest]],
+                context)
+            .catch(failure => {
+                const failureMessage = `${failure?.message}: ${url}`;
                 if(rejectOnFailure) {
                     return Promise.reject(failureMessage);
                 } else {
@@ -80,6 +78,17 @@ export class RequestAction extends Action {
             }
             logger.info(body);
             return this.append(context.state, body);
+        });
+    }
+
+    private request(url: string, method: any, body: any,
+        contentType: string): Promise<any> {
+        return axios(url, {
+            method: method,
+            data: body,
+            headers: {
+                'Content-Type': contentType
+            }
         });
     }
 }

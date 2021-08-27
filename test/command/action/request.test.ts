@@ -2,6 +2,9 @@ import { RequestAction } from "../../../src/command/action/request";
 import { Command } from "../../../src/command/command";
 import axios from 'axios';
 import { ActionContext } from "../../../src/command/action/action";
+import { logger } from '../../../src/logger';
+
+logger.silent = false;
 
 jest.mock('axios');
 
@@ -182,5 +185,35 @@ describe('request action', () => {
         const result = await new RequestAction().run(context('url'));
 
         expect(result[Command[Command.Request]]).toEqual('{"a":123,"b":"value"}');
+    });
+
+    it('request retry to max failures before failing action', async () => {
+        const expectedRetries = 3;
+
+        mockRequest.mockRejectedValue({});
+
+        const subject = new RequestAction();
+
+        await expect(subject.run(context('url', {
+            ExitOnRequestFailure: true,
+            RetryRequest: expectedRetries,
+            RetryDelayMs: 0
+        }))).rejects.not.toBeUndefined();
+        expect(mockRequest.mock.calls.length).toEqual(expectedRetries+1);
+    });
+
+    it('request retry and invokes request', async () => {
+        mockRequest.mockRejectedValueOnce({});
+        mockRequest.mockRejectedValueOnce({});
+        mockRequest.mockReturnValue(Promise.resolve());
+
+        const subject = new RequestAction();
+
+        await subject.run(context('url', {
+            ExitOnRequestFailure: true,
+            RetryRequest: 5,
+            RetryDelayMs: 0
+        }));
+        expect(mockRequest.mock.calls.length).toEqual(3);
     });
 });

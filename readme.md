@@ -43,6 +43,7 @@ Additional systematically provided variables are used for configuration. The val
 - `<ExitOnRequestFailure>`=true : fail the webcrawler if a Request fails
 - `<ExitOnDownloadFailure>`=false : fail the webcrawler if a Download fails
 - `<RetryRequest>`=0 : attempts to retry any Request (or Download)
+- `<RetryDelayMs>`=1000 : delay in milliseconds before a retry
 
 ### Samples
 - Basic command behavior: [behavior](samples/behavior/)

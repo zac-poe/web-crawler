@@ -62,12 +62,13 @@ describe('command block', () => {
             Repeat: 1,
             ExitOnRequestFailure: true,
             ExitOnDownloadFailure: false,
-            RetryRequest: 0
+            RetryRequest: 0,
+            RetryDelayMs: 1000
         });
     });
 
     it('executes with provided state', async () => {
-        const expectedState = { a: 123 };
+        const expectedState: any = { a: 123 };
 
         const subject = new CommandBlock({Command: 'value'},
             expectedState);
@@ -75,9 +76,10 @@ describe('command block', () => {
         
         await subject.resolve();
 
-        const { Repeat, ExitOnRequestFailure, ExitOnDownloadFailure, RetryRequest,
-            ...stateRemainder } = mockExecutor.mock.calls[0][0].state;
-        expect(stateRemainder).toEqual(expectedState);
+        for(const key of Object.keys(expectedState)) {
+            expect(mockExecutor.mock.calls[0][0].state[key])
+                .toEqual(expectedState[key]);
+        }
     });
 
     it('executes with existing value for repeat', async () => {
@@ -122,6 +124,17 @@ describe('command block', () => {
         await subject.resolve();
 
         expect(mockExecutor.mock.calls[0][0].state.RetryRequest).toEqual(expected);
+    });
+
+    it('executes with existing value for retry delay', async () => {
+        const expected = 0;
+        const subject = new CommandBlock({Command: 'value'},
+            {RetryDelayMs: expected});
+        injectMocks();
+        
+        await subject.resolve();
+
+        expect(mockExecutor.mock.calls[0][0].state.RetryDelayMs).toEqual(expected);
     });
 
     it('executes commands sequentially', async () => {
