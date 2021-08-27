@@ -98,4 +98,34 @@ describe('download action', () => {
 
         expect(mockRequest.mock.calls[0][0]).toEqual('http://some value/path');
     });
+
+    it('download retry to max failures before failing action', async () => {
+        const expectedRetries = 3;
+
+        mockRequest.mockRejectedValue({});
+
+        const subject = new DownloadAction();
+
+        await expect(subject.run(context('url', {
+            ExitOnDownloadFailure: true,
+            RetryRequest: expectedRetries,
+            RetryDelayMs: 0
+        }))).rejects.not.toBeUndefined();
+        expect(mockRequest.mock.calls.length).toEqual(expectedRetries+1);
+    });
+
+    it('download retry and invokes request', async () => {
+        mockRequest.mockRejectedValueOnce({});
+        mockRequest.mockRejectedValueOnce({});
+        mockRequest.mockReturnValue(Promise.resolve({data:{pipe:jest.fn()}}));
+
+        const subject = new DownloadAction();
+
+        await subject.run(context('url', {
+            ExitOnDownloadFailure: true,
+            RetryRequest: 5,
+            RetryDelayMs: 0
+        }));
+        expect(mockRequest.mock.calls.length).toEqual(3);
+    });
 });

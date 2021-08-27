@@ -4,7 +4,7 @@ import axios from 'axios';
 import { logger } from '../../logger';
 import path from 'path';
 import fs from 'fs';
-import { Configuration } from "../command-block";
+import { Configuration } from '../configuration';
 
 export class DownloadAction extends Action {
     getCommand(): string {
@@ -23,9 +23,12 @@ export class DownloadAction extends Action {
         return new Promise<void>(resolve => {
             logger.info(`${this.getCommand()}: %s`, value);
             resolve();
-        }).then(() => axios.get(value, {responseType: 'stream'})
+        }).then(() => this.retry(
+                () => this.download(value),
+                context.state[Configuration[Configuration.RetryRequest]],
+                context)
             .catch(failure => {
-                const failureMessage = `${failure.message}: ${value}`;
+                const failureMessage = `${failure?.message}: ${value}`;
                 if(rejectOnFailure) {
                     return Promise.reject(failureMessage);
                 } else {
@@ -45,5 +48,9 @@ export class DownloadAction extends Action {
             }
             return context.state;
         });
+    }
+
+    private download(url: string): Promise<any> {
+        return axios.get(url, {responseType: 'stream'});
     }
 }
