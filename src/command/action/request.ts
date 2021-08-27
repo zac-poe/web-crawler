@@ -16,11 +16,8 @@ export class RequestAction extends Action {
     }
 
     run(context: ActionContext): Promise<any> {
-        let rejectOnFailure = context.state[Configuration[Configuration.ExitOnRequestFailure]];
-        if(typeof rejectOnFailure !== 'boolean') {
-            rejectOnFailure = rejectOnFailure !== 0
-                && rejectOnFailure !== 'false';
-        }
+        const rejectOnFailure = this.parseBoolean(
+            context.state[Configuration[Configuration.ExitOnRequestFailure]]);
 
         let url: string,
             method: string='get',

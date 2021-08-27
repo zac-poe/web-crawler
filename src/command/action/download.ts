@@ -17,11 +17,8 @@ export class DownloadAction extends Action {
             return Promise.reject(`${this.getCommand()} command requires url`);
         }
 
-        let rejectOnFailure = context.state[Configuration[Configuration.ExitOnDownloadFailure]];
-        if(typeof rejectOnFailure !== 'boolean') {
-            rejectOnFailure = rejectOnFailure === 1
-                || rejectOnFailure === 'true';
-        }
+        const rejectOnFailure = this.parseBoolean(
+            context.state[Configuration[Configuration.ExitOnDownloadFailure]]);
 
         return new Promise<void>(resolve => {
             logger.info(`${this.getCommand()}: %s`, value);

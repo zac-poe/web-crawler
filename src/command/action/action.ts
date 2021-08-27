@@ -20,6 +20,14 @@ export class Action {
     getCommand(): string {
         return undefined as any;
     }
+
+    protected parseBoolean(value: any): boolean {
+        let result = value;
+        if(typeof result !== 'boolean') {
+            result = result === 1 || result === 'true';
+        }
+        return result;
+    }
 }
 
 export interface ActionContext {

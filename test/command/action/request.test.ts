@@ -109,14 +109,23 @@ describe('request action', () => {
         }))).rejects.not.toBeUndefined();
     });
 
-    it('web request failures fail action', async () => {
+    it('web request failures fail action when configured', async () => {
         const failure = "some failure";
 
         mockRequest.mockRejectedValue({message: failure});
 
         const subject = new RequestAction();
 
-        await expect(subject.run(context('url'))).rejects.toEqual(`${failure}: url`);
+
+        const getResult = async (value: any) => {
+            let {ExitOnRequestFailure, ...result} = await subject
+                .run(context('url', { ExitOnRequestFailure: value }));
+            return result;
+        };
+
+        await expect(getResult(true)).rejects.toEqual(`${failure}: url`);
+        await expect(getResult(1)).rejects.toEqual(`${failure}: url`);
+        await expect(getResult("true")).rejects.toEqual(`${failure}: url`);
     });
 
     it('web request failures do not fail action when configured', async () => {
